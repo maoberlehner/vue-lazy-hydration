@@ -1,0 +1,53 @@
+{
+  "name": "vue-lazy-hydration",
+  "version": "0.1.0-alpha.1",
+  "description": "Lazy hydration of server-side rendered Vue.js components",
+  "keywords": [
+    "hydration",
+    "nuxt",
+    "ssr",
+    "vue"
+  ],
+  "author": "Markus Oberlehner",
+  "homepage": "https://github.com/maoberlehner/vue-lazy-hydration",
+  "license": "MIT",
+  "scripts": {
+    "scripts:umd": "rollup --config --output.format umd --name vue-lazy-hydration --output.file dist/index.js src/index.js",
+    "scripts:es": "rollup --config --output.format es --name vue-lazy-hydration --output.file dist/index.esm.js src/index.js",
+    "scripts:minify": "uglifyjs --compress --mangle --comments --output dist/index.min.js dist/index.js && uglifyjs --compress --mangle --comments --output dist/index.esm.min.js dist/index.esm.js",
+    "scripts": "yarn run scripts:umd && yarn run scripts:es && yarn run scripts:minify",
+    "build": "yarn run scripts",
+    "lint:scripts": "eslint --fix --ignore-path .gitignore .",
+    "lint:scripts-md": "eslint --config .eslintrc-md.json --ext md --ignore-path .gitignore .",
+    "lint": "yarn run lint:scripts && yarn run lint:scripts-md",
+    "prepublishOnly": "yarn run lint && yarn run build"
+  },
+  "devDependencies": {
+    "@avalanche/eslint-config": "^3.0.0",
+    "@babel/core": "^7.2.2",
+    "@babel/preset-env": "^7.2.3",
+    "eslint": "^5.12.0",
+    "eslint-plugin-compat": "^2.6.3",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-markdown": "^1.0.0",
+    "rollup": "^1.0.2",
+    "rollup-plugin-babel": "^4.2.0",
+    "uglify-es": "^3.3.9",
+    "vue": "^2.5.21",
+    "vue-template-compiler": "^2.5.21"
+  },
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/maoberlehner/vue-lazy-hydration"
+  },
+  "bugs": {
+    "url": "https://github.com/maoberlehner/vue-lazy-hydration/issues"
+  },
+  "browserslist": [
+    "> 0.5%",
+    "not ie <= 10",
+    "not op_mini all"
+  ]
+}

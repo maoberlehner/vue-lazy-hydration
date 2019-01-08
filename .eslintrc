@@ -1,0 +1,18 @@
+{
+  "env": {
+    "browser": true,
+    "node": true,
+    "jest": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 9
+  },
+  "plugins": ["compat"],
+  "extends": "@avalanche/eslint-config",
+  "rules": {
+    "compat/compat": 2
+  },
+  "settings": {
+    "polyfills": ["promises"]
+  }
+}
