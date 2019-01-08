@@ -49,7 +49,7 @@ export const VueLazyHydration = {
     };
     const hydrateComponents = (components) => {
       Object.keys(components)
-        .map(x => this.$options.components[x])
+        .map(x => components[x])
         .map(hydrate);
     };
 
