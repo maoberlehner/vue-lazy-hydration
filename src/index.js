@@ -1,6 +1,3 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
-import Vue from 'vue';
-
 const DEFAULT_OPTIONS = {
   hydrationSwitch: Promise.resolve(false),
   firstRenderTimeout: 1000,
@@ -27,7 +24,7 @@ export function ssrOnly(componentFactory) {
 }
 
 export const VueLazyHydration = {
-  install(_, customOptions) {
+  install(Vue, customOptions) {
     const options = {
       ...DEFAULT_OPTIONS,
       ...customOptions,
