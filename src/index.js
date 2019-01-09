@@ -4,7 +4,7 @@ const DEFAULT_OPTIONS = {
 };
 const NAMESPACE = `_lazyHydration`;
 
-export function ssrOnly(componentFactory) {
+export function loadSsrOnly(componentFactory) {
   if (process.server) return componentFactory;
 
   let resolver;
