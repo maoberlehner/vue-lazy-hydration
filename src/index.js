@@ -2,6 +2,7 @@ const DEFAULT_OPTIONS = {
   hydrationSwitch: Promise.resolve(false),
   firstRenderTimeout: 1000,
 };
+const NAMESPACE = `_lazyHydration`;
 
 export function ssrOnly(componentFactory) {
   if (process.server) return componentFactory;
@@ -14,10 +15,15 @@ export function ssrOnly(componentFactory) {
     resolverPromise.then(() => resolve(componentFactory()));
   });
 
-  const factory = () => promise;
+  const factory = () => {
+    factory[NAMESPACE].resolve = undefined;
+    return promise;
+  };
 
-  Object.defineProperty(factory, `_lazyHydrationResolve`, {
-    value: resolver,
+  Object.defineProperty(factory, NAMESPACE, {
+    value: {
+      resolve: resolver,
+    },
   });
 
   return factory;
@@ -41,10 +47,8 @@ export const VueLazyHydration = {
     }, options.firstRenderTimeout);
 
     const hydrate = (component) => {
-      // eslint-disable-next-line no-underscore-dangle
-      if (component._lazyHydrationResolve) {
-        // eslint-disable-next-line no-underscore-dangle
-        component._lazyHydrationResolve();
+      if (component[NAMESPACE] && component[NAMESPACE].resolve) {
+        component[NAMESPACE].resolve();
       }
     };
     const hydrateComponents = (components) => {
