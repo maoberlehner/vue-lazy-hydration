@@ -9,7 +9,7 @@
 
 ## Motivation
 
-vue-lazy-hydration is a component to **improve Estimated Input Latency and Time to Interactive** of server-side rendered Vue.js Applications. This can be achieved **by using lazy hydration to delay the hydration of pre-rendered HTML**. Additionally, **code splitting is used to delay the loading of the JavaScript code of components** which are marked for lazy hydration.
+vue-lazy-hydration is a component to **improve Estimated Input Latency and Time to Interactive** of server-side rendered Vue.js applications. This can be achieved **by using lazy hydration to delay the hydration of pre-rendered HTML**. Additionally, **code splitting is used to delay the loading of the JavaScript code of components** which are marked for lazy hydration.
 
 ## Install
 
