@@ -59,12 +59,10 @@ export const VueLazyHydration = {
 
     Vue.mixin({
       beforeCreate() {
-        // TODO exceptions?
         if (process.server || preventHydration) return;
         hydrateComponents(this.$options.components);
       },
       beforeUpdate() {
-        // TODO exceptions?
         if (process.server || preventHydration) return;
         hydrateComponents(this.$options.components);
       },
