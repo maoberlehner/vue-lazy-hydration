@@ -23,7 +23,7 @@ In the example below you can see the three `load` modi in action.
 
 1. The `ArticleContent` component is only loaded in SSR mode, which means it never gets hydrated in the browser, which also means it will never be interactive (static content only).
 2. Next we can see the `AddSlider` beneath the article content, this component will most likely not be visible initially so we can delay hydration until the point it becomes visible.
-3. At the very bottom of the page we want to render a comment form but because most people only read the article and don't leave a comment, we can save resources by only hydrating the component whenever it receives focus.
+3. At the very bottom of the page we want to render a `CommentForm` but because most people only read the article and don't leave a comment, we can save resources by only hydrating the component whenever it actually receives focus.
 
 ```html
 <template>
