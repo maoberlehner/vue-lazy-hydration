@@ -43,7 +43,10 @@ import {
 
 export default {
   components: {
-    AddSlider: loadWhenVisible(() => import('./AddSlider.vue')),
+    AddSlider: loadWhenVisible(
+      () => import('./AddSlider.vue'),
+      { selector: `.AddSlider` },
+    ),
     ArticleContent: loadSsrOnly(() => import('./ArticleContent.vue')),
     CommentForm: loadOnInteraction(
       () => import('./CommentForm.vue'),
