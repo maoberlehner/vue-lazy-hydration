@@ -29,6 +29,27 @@ Because of how this plugin works, **lazy loaded components will not automaticall
 npm install vue-lazy-hydration
 ```
 
+### Nuxt.js
+
+Add `vue-lazy-hydration/nuxt` to modules section of `nuxt.config.js`.
+
+```js
+export default {
+  // ...
+  modules: ['vue-lazy-hydration/nuxt'],
+  // ...
+};
+```
+
+### Vue.js (with SSR)
+
+```js
+import { VueLazyHydration } from 'vue-lazy-hydration';
+import Vue from 'vue';
+
+Vue.use(VueLazyHydration);
+```
+
 ### Basic example
 
 In the example below you can see the three `load` modi in action.
