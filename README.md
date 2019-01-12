@@ -58,6 +58,51 @@ export default {
 </script>
 ```
 
+### Advanced
+
+#### Manually load and hydrate component
+
+Sometimes you might want to prevent a component from loading initially but you want to activate it on demand if a certain action is triggered. You can do this by manually resolving the component like you can see in the following example.
+
+```html
+<template>
+  <div class="MyComponent">
+    <button @click="editModeActive = true">
+      Activate edit mode
+    </button>
+    <UserSettingsForm :editable="editModeActive"/>
+  </div>
+</template>
+
+<script>
+import { loadSsrOnly } from 'vue-lazy-hydration';
+
+const ResolvableUserSettingsForm = loadSsrOnly(() => import(`./UserSettingsForm.vue`));
+
+export default {
+  components: {
+    UserSettingsForm: ResolvableUserSettingsForm,
+  },
+  data() {
+    return {
+      editModeActive: false,
+    };
+  },
+  watch: {
+    // As soon as the value of `editModeActive` changes the
+    // `UserSettingsForm` component is loaded and hydrated
+    // so it becomes fully interactive.
+    editModeActive() {
+      if (ResolvableUserSettingsForm.lazyHydration.resolve) {
+        ResolvableUserSettingsForm.lazyHydration.resolve();
+      }
+    },
+  },
+  // ...
+};
+</script>
+```
+
 ## About
 
 ### Author

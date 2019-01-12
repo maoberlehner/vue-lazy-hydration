@@ -2,40 +2,47 @@ const DEFAULT_OPTIONS = {
   hydrationSwitch: Promise.resolve(false),
   firstRenderTimeout: 1000,
 };
-const NAMESPACE = `_lazyHydration`;
+const NAMESPACE = `lazyHydration`;
 
-function resolvableFactory(componentFactory) {
-  let resolver;
-  const resolverPromise = new Promise((resolve) => {
-    resolver = resolve;
-  });
-  const promise = new Promise((resolve) => {
-    resolverPromise.then(() => resolve(componentFactory()));
+export function resolvableFactory() {
+  let resolve;
+  const promise = new Promise((newResolve) => {
+    resolve = newResolve;
   });
 
-  const resolvable = () => {
+  return {
+    promise,
+    resolve: value => resolve(value),
+  };
+}
+
+export function resolvableComponentFactory(componentFactory) {
+  const {
+    promise,
+    resolve,
+  } = resolvableFactory();
+
+  const resolvableComponent = () => {
     promise.then(() => {
-      resolvable[NAMESPACE].resolve = undefined;
+      resolvableComponent[NAMESPACE].resolve = undefined;
     });
 
     return promise;
   };
 
-  Object.defineProperty(resolvable, NAMESPACE, {
+  Object.defineProperty(resolvableComponent, NAMESPACE, {
     value: {
-      resolve: resolver,
+      resolve: () => resolve(componentFactory()),
     },
   });
 
-  return resolvable;
+  return resolvableComponent;
 }
 
 export function loadSsrOnly(componentFactory) {
   if (!process.browser) return componentFactory;
 
-  const resolvable = resolvableFactory(componentFactory);
-
-  return resolvable;
+  return resolvableComponentFactory(componentFactory);
 }
 
 export function loadWhenVisible(componentFactory, { selector }) {
@@ -43,10 +50,10 @@ export function loadWhenVisible(componentFactory, { selector }) {
     return componentFactory;
   }
 
-  const resolvable = resolvableFactory(componentFactory);
+  const resolvableComponent = resolvableComponentFactory(componentFactory);
   const elements = Array.from(document.querySelectorAll(selector));
   const observer = new IntersectionObserver((entries) => {
-    if (!resolvable[NAMESPACE].resolve) return;
+    if (!resolvableComponent[NAMESPACE].resolve) return;
     // Use `intersectionRatio` because of Edge 15's
     // lack of support for `isIntersecting`.
     // See: https://github.com/w3c/IntersectionObserver/issues/211
@@ -54,11 +61,11 @@ export function loadWhenVisible(componentFactory, { selector }) {
     if (!isIntersecting) return;
 
     elements.forEach(x => observer.unobserve(x));
-    resolvable[NAMESPACE].resolve();
+    resolvableComponent[NAMESPACE].resolve();
   });
   elements.forEach(x => observer.observe(x));
 
-  return resolvable;
+  return resolvableComponent;
 }
 
 export const VueLazyHydration = {
