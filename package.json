@@ -1,6 +1,6 @@
 {
   "name": "vue-lazy-hydration",
-  "version": "0.1.0-alpha.1",
+  "version": "0.1.0-alpha.3",
   "description": "Lazy hydration of server-side rendered Vue.js components",
   "keywords": [
     "hydration",
