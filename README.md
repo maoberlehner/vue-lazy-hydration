@@ -7,9 +7,21 @@
 
 > Lazy hydration of server-side rendered Vue.js components.
 
+## WARNING: Alpha stage
+
+This plugin is currently in an early alpha stage. Although everything seems to work fine in combination with the applications I tested it with, there might be certain cases I haven't considered. I'd be very happy if you test it with your own projects and report back if it works for you.
+
+**Use at your own risk.**
+
 ## Motivation
 
 `vue-lazy-hydration` is a Vue.js plugin and Nuxt.js module to **improve Estimated Input Latency and Time to Interactive** of server-side rendered Vue.js applications. This can be achieved **by using lazy hydration to delay the hydration of pre-rendered HTML**. Additionally, **code splitting is used to delay the loading of the JavaScript code of components** which are marked for lazy hydration.
+
+## Caveats
+
+Because of how this plugin works, **lazy loaded components will not automatically rerender when properties change**. This is by design. The basic idea is to **use this plugin for mostly static sites** or for **mostly static components** of a otherwise dynamic application.
+
+**This plugin will not work as advertised if you're not using it in combination with SSR.** Although it should work with every pre-rendering approach (like [Prerender SPA Plugin](https://github.com/chrisvfritz/prerender-spa-plugin), [Gridsome](https://gridsome.org/), ...) I've only tested it with [Nuxt.js](https://nuxtjs.org) so far.
 
 ## Install
 
