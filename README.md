@@ -139,6 +139,16 @@ export default {
 </script>
 ```
 
+## Benchmarks
+
+### Without lazy hydration
+
+![Without lazy hydration.](https://res.cloudinary.com/maoberlehner/image/upload/c_scale,f_auto,q_auto,w_600/v1532158513/github/vue-lazy-hydration/no-lazy-hydration-demo-benchmark)
+
+### With lazy hydration
+
+![With lazy hydration.](https://res.cloudinary.com/maoberlehner/image/upload/c_scale,f_auto,q_auto,w_600/v1532158513/github/vue-lazy-hydration/lazy-hydration-demo-benchmark)
+
 ## About
 
 ### Author
