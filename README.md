@@ -78,14 +78,14 @@ export default {
   components: {
     AdSlider: loadWhenVisible(
       () => import('./AdSlider.vue'),
-      { selector: `.AdSlider` },
+      { selector: '.AdSlider' },
     ),
     ArticleContent: loadSsrOnly(() => import('./ArticleContent.vue')),
     CommentForm: loadOnInteraction(
       () => import('./CommentForm.vue'),
       {
-        event: ['click' `focusin`],
-        selector: `.CommentForm`,
+        event: ['click', 'focusin'],
+        selector: '.CommentForm',
       },
     ),
   },
@@ -113,7 +113,7 @@ Sometimes you might want to prevent a component from loading initially but you w
 <script>
 import { loadSsrOnly } from 'vue-lazy-hydration';
 
-const ResolvableUserSettingsForm = loadSsrOnly(() => import(`./UserSettingsForm.vue`));
+const ResolvableUserSettingsForm = loadSsrOnly(() => import('./UserSettingsForm.vue'));
 
 export default {
   components: {
