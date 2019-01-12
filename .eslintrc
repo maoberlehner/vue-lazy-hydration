@@ -13,6 +13,9 @@
     "compat/compat": 2
   },
   "settings": {
-    "polyfills": ["promises"]
+    "polyfills": [
+      "intersectionobserver",
+      "promises"
+    ]
   }
 }

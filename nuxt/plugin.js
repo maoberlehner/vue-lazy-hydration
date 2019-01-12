@@ -14,7 +14,7 @@ Vue.use(VueLazyHydration, {
 });
 
 export default ({ app }) => {
-  if (process.server) return;
+  if (!process.browser) return;
 
   app.router.beforeEach((to, from, next) => {
     if (skipFirstRouteChange) {

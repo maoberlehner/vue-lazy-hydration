@@ -4,9 +4,7 @@ const DEFAULT_OPTIONS = {
 };
 const NAMESPACE = `_lazyHydration`;
 
-export function loadSsrOnly(componentFactory) {
-  if (process.server) return componentFactory;
-
+function resolvableFactory(componentFactory) {
   let resolver;
   const resolverPromise = new Promise((resolve) => {
     resolver = resolve;
@@ -15,22 +13,58 @@ export function loadSsrOnly(componentFactory) {
     resolverPromise.then(() => resolve(componentFactory()));
   });
 
-  const factory = () => {
-    factory[NAMESPACE].resolve = undefined;
+  const resolvable = () => {
+    promise.then(() => {
+      resolvable[NAMESPACE].resolve = undefined;
+    });
+
     return promise;
   };
 
-  Object.defineProperty(factory, NAMESPACE, {
+  Object.defineProperty(resolvable, NAMESPACE, {
     value: {
       resolve: resolver,
     },
   });
 
-  return factory;
+  return resolvable;
+}
+
+export function loadSsrOnly(componentFactory) {
+  if (!process.browser) return componentFactory;
+
+  const resolvable = resolvableFactory(componentFactory);
+
+  return resolvable;
+}
+
+export function loadWhenVisible(componentFactory, { selector }) {
+  if (!process.browser || !(`IntersectionObserver` in window)) {
+    return componentFactory;
+  }
+
+  const resolvable = resolvableFactory(componentFactory);
+  const elements = Array.from(document.querySelectorAll(selector));
+  const observer = new IntersectionObserver((entries) => {
+    if (!resolvable[NAMESPACE].resolve) return;
+    // Use `intersectionRatio` because of Edge 15's
+    // lack of support for `isIntersecting`.
+    // See: https://github.com/w3c/IntersectionObserver/issues/211
+    const isIntersecting = !!entries.find(x => x.intersectionRatio > 0);
+    if (!isIntersecting) return;
+
+    elements.forEach(x => observer.unobserve(x));
+    resolvable[NAMESPACE].resolve();
+  });
+  elements.forEach(x => observer.observe(x));
+
+  return resolvable;
 }
 
 export const VueLazyHydration = {
   install(Vue, customOptions) {
+    if (!process.browser) return;
+
     const options = {
       ...DEFAULT_OPTIONS,
       ...customOptions,
@@ -59,11 +93,11 @@ export const VueLazyHydration = {
 
     Vue.mixin({
       beforeCreate() {
-        if (process.server || preventHydration) return;
+        if (preventHydration) return;
         hydrateComponents(this.$options.components);
       },
       beforeUpdate() {
-        if (process.server || preventHydration) return;
+        if (preventHydration) return;
         hydrateComponents(this.$options.components);
       },
     });
