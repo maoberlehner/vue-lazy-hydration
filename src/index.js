@@ -96,10 +96,6 @@ export const VueLazyHydration = {
         if (preventHydration) return;
         hydrateComponents(this.$options.components);
       },
-      beforeUpdate() {
-        if (preventHydration) return;
-        hydrateComponents(this.$options.components);
-      },
     });
   },
 };
