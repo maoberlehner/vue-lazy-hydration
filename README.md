@@ -50,7 +50,10 @@ export default {
     ArticleContent: loadSsrOnly(() => import('./ArticleContent.vue')),
     CommentForm: loadOnInteraction(
       () => import('./CommentForm.vue'),
-      { event: 'focus' },
+      {
+        event: ['click' `focusin`],
+        selector: `.CommentForm`,
+      },
     ),
   },
   // ...

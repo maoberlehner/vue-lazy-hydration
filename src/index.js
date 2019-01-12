@@ -32,8 +32,38 @@ export function resolvableComponentFactory(componentFactory) {
 
   Object.defineProperty(resolvableComponent, NAMESPACE, {
     value: {
+      promise,
       resolve: () => resolve(componentFactory()),
     },
+  });
+
+  return resolvableComponent;
+}
+
+export function loadOnInteraction(componentFactory, { event, selector }) {
+  if (!process.browser) return componentFactory;
+
+  const elements = selector
+    ? Array.from(document.querySelectorAll(selector))
+    : [document];
+  const events = Array.isArray(event) ? event : [event];
+  const resolvableComponent = resolvableComponentFactory(componentFactory);
+
+  const eventHandler = (e) => {
+    e.currentTarget.removeEventListener(e.type, eventHandler);
+    if (!resolvableComponent[NAMESPACE].resolve) return;
+
+    resolvableComponent[NAMESPACE].promise.then(() => {
+      // Wait for next tick.
+      setTimeout(() => e.target.dispatchEvent(e));
+    });
+    resolvableComponent[NAMESPACE].resolve();
+  };
+
+  events.forEach((eventName) => {
+    elements.forEach((element) => {
+      element.addEventListener(eventName, eventHandler);
+    });
   });
 
   return resolvableComponent;
