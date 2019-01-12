@@ -4,7 +4,7 @@ const DEFAULT_OPTIONS = {
 };
 const NAMESPACE = `lazyHydration`;
 
-export function resolvableFactory() {
+function resolvableFactory() {
   let resolve;
   const promise = new Promise((newResolve) => {
     resolve = newResolve;
@@ -16,7 +16,7 @@ export function resolvableFactory() {
   };
 }
 
-export function resolvableComponentFactory(componentFactory) {
+function resolvableComponentFactory(componentFactory) {
   const {
     promise,
     resolve,
