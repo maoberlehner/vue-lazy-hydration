@@ -17,7 +17,7 @@
     "scripts:minify": "uglifyjs --compress --mangle --comments --output dist/index.min.js dist/index.js && uglifyjs --compress --mangle --comments --output dist/index.esm.min.js dist/index.esm.js",
     "scripts": "yarn run scripts:umd && yarn run scripts:es && yarn run scripts:minify",
     "build": "yarn run scripts",
-    "lint:scripts": "eslint --fix --ignore-path .gitignore .",
+    "lint:scripts": "eslint --ignore-path .gitignore .",
     "lint:scripts-md": "eslint --config .eslintrc-md.json --ext md --ignore-path .gitignore .",
     "lint": "yarn run lint:scripts && yarn run lint:scripts-md",
     "prepublishOnly": "yarn run lint && yarn run build"
