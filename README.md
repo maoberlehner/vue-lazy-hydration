@@ -149,6 +149,10 @@ export default {
 
 ![With lazy hydration.](https://res.cloudinary.com/maoberlehner/image/upload/c_scale,f_auto,q_auto,w_600/v1532158513/github/vue-lazy-hydration/lazy-hydration-demo-benchmark)
 
+## Articles
+
+- [How to Drastically Reduce Estimated Input Latency and Time to Interactive of SSR Vue.js Applications](https://markus.oberlehner.net/blog/how-to-drastically-reduce-estimated-input-latency-and-time-to-interactive-of-ssr-vue-applications/)
+
 ## About
 
 ### Author
