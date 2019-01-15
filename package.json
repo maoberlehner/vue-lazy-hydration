@@ -30,11 +30,11 @@
     "eslint-plugin-compat": "^2.6.3",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-markdown": "^1.0.0",
-    "rollup": "^1.0.2",
-    "rollup-plugin-babel": "^4.2.0",
+    "rollup": "^1.1.0",
+    "rollup-plugin-babel": "^4.3.0",
     "uglify-es": "^3.3.9",
-    "vue": "^2.5.21",
-    "vue-template-compiler": "^2.5.21"
+    "vue": "^2.5.22",
+    "vue-template-compiler": "^2.5.22"
   },
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
