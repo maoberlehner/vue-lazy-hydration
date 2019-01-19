@@ -7,21 +7,15 @@
 
 > Lazy hydration of server-side rendered Vue.js components.
 
-## WARNING: Alpha stage
+## WARNING: Beta stage
 
-This plugin is currently in an early alpha stage. Although everything seems to work fine in combination with the applications I tested it with, there might be certain cases I haven't considered. I'd be very happy if you test it with your own projects and report back if it works for you.
+This plugin is currently in an early beta stage. Although everything seems to work fine in combination with the applications I tested it with, there might be certain cases I haven't considered. I'd be very happy if you test it with your own projects and report back if it works for you.
 
 **Use at your own risk.**
 
 ## Motivation
 
-`vue-lazy-hydration` is a Vue.js plugin and Nuxt.js module to **improve Estimated Input Latency and Time to Interactive** of server-side rendered Vue.js applications. This can be achieved **by using lazy hydration to delay the hydration of pre-rendered HTML**. Additionally, **code splitting is used to delay the loading of the JavaScript code of components** which are marked for lazy hydration.
-
-## Caveats
-
-Because of how this plugin works, **lazy loaded components will not automatically rerender when properties change**. This is by design. The basic idea is to **use this plugin for mostly static sites** or for **mostly static components** of a otherwise dynamic application.
-
-**This plugin will not work as advertised if you're not using it in combination with SSR.** Although it should work with every pre-rendering approach (like [Prerender SPA Plugin](https://github.com/chrisvfritz/prerender-spa-plugin), [Gridsome](https://gridsome.org/), ...) I've only tested it with [Nuxt.js](https://nuxtjs.org) so far.
+`vue-lazy-hydration` is a renderless Vue.js component to **improve Estimated Input Latency and Time to Interactive** of server-side rendered Vue.js applications. This can be achieved **by using lazy hydration to delay the hydration of pre-rendered HTML**.
 
 ## Install
 
@@ -29,76 +23,87 @@ Because of how this plugin works, **lazy loaded components will not automaticall
 npm install vue-lazy-hydration
 ```
 
-### Nuxt.js
-
-Add `vue-lazy-hydration/nuxt` to modules section of `nuxt.config.js`.
-
 ```js
+import LazyHydrate from 'vue-lazy-hydration';
+// ...
+
 export default {
   // ...
-  modules: ['vue-lazy-hydration/nuxt'],
+  components: {
+    LazyHydrate,
+    // ...
+  },
   // ...
 };
 ```
 
-### Vue.js (with SSR)
-
-```js
-import { VueLazyHydration } from 'vue-lazy-hydration';
-import Vue from 'vue';
-
-Vue.use(VueLazyHydration);
-```
-
 ### Basic example
 
-In the example below you can see the three `load` modi in action.
-
-1. The `ArticleContent` component is only loaded in SSR mode, which means it never gets hydrated in the browser, which also means it will never be interactive (static content only).
-2. Next we can see the `AdSlider` beneath the article content, this component will most likely not be visible initially so we can delay hydration until the point it becomes visible.
-3. At the very bottom of the page we want to render a `CommentForm` but because most people only read the article and don't leave a comment, we can save resources by only hydrating the component whenever it actually receives focus.
+In the example below you can see the four hydration modes in action.
 
 ```html
 <template>
   <div class="ArticlePage">
-    <ArticleContent :content="article.content"/>
-    <AdSlider/>
-    <CommentForm :article-id="article.id"/>
+    <LazyHydrate when-idle>
+      <ImageSlider/>
+    </LazyHydrate>
+
+    <LazyHydrate ssr-only>
+      <ArticleContent :content="article.content"/>
+    </LazyHydrate>
+
+    <LazyHydrate when-visible>
+      <AdSlider/>
+    </LazyHydrate>
+
+    <!-- `on-interaction` listens for a `focus` event by default ... -->
+    <LazyHydrate on-interaction>
+      <CommentForm :article-id="article.id"/>
+    </LazyHydrate>
+    <!-- ... but you can listen for any event you want. -->
+    <LazyHydrate on-interaction="click">
+      <CommentForm :article-id="article.id"/>
+    </LazyHydrate>
+    
+    <!-- You can also wrap multiple components if you don't mind a wrapper `<div>` -->
+    <LazyHydrate when-visible>
+      <ImageSlider/>
+      <ArticleContent :content="article.content"/>
+      <AdSlider/>
+    </LazyHydrate>
   </div>
 </template>
 
 <script>
-import {
-  loadOnInteraction,
-  loadSsrOnly,
-  loadWhenVisible,
-} from 'vue-lazy-hydration';
+import LazyHydrate from 'vue-lazy-hydration';
 
 export default {
   components: {
-    AdSlider: loadWhenVisible(
-      () => import('./AdSlider.vue'),
-      { selector: '.AdSlider' },
-    ),
-    ArticleContent: loadSsrOnly(() => import('./ArticleContent.vue')),
-    CommentForm: loadOnInteraction(
-      () => import('./CommentForm.vue'),
-      {
-        event: ['click', 'focusin'],
-        selector: '.CommentForm',
-      },
-    ),
+    LazyHydrate,
+    AdSlider: () => import('./AdSlider.vue'),
+    ArticleContent: () => import('./ArticleContent.vue'),
+    CommentForm: () => import('./CommentForm.vue'),
+    ImageSlider: () => import('./ImageSlider.vue'),
   },
   // ...
 };
 </script>
 ```
 
+1. Because it is at the very top of the page, the `ImageSlider` should be hydrated eventually, but we can wait until the browser is idle.
+2. The `ArticleContent` component is only loaded in SSR mode, which means it never gets hydrated in the browser, which also means it will never be interactive (static content only).
+3. Next we can see the `AdSlider` beneath the article content, this component will most likely not be visible initially so we can delay hydration until the point it becomes visible.
+4. At the very bottom of the page we want to render a `CommentForm` but because most people only read the article and don't leave a comment, we can save resources by only hydrating the component whenever it actually receives focus.
+
+#### Multiple root nodes
+
+Usually `vue-lazy-hydration` does not render a DOM element itself if only a single component is nested inside `<LazyHydrate>`. If you decide to render multiple components inside of a single `<LazyHydrate>` tag, a wrapper `<div>` with `style="display: contents"` is added. Adding `display: contents` makes that the wrapper `<div>` doesn't generate any box.
+
 ### Advanced
 
-#### Manually load and hydrate component
+#### Manualy trigger hydration
 
-Sometimes you might want to prevent a component from loading initially but you want to activate it on demand if a certain action is triggered. You can do this by manually resolving the component like you can see in the following example.
+Sometimes you might want to prevent a component from loading initially but you want to activate it on demand if a certain action is triggered. You can do this by manually triggering the component to hydrate like you can see in the following example.
 
 ```html
 <template>
@@ -106,33 +111,24 @@ Sometimes you might want to prevent a component from loading initially but you w
     <button @click="editModeActive = true">
       Activate edit mode
     </button>
-    <UserSettingsForm :editable="editModeActive"/>
+    <LazyHydrate ssr-only :trigger-hydration="editModeActive">
+      <UserSettingsForm :editable="editModeActive"/>
+    </LazyHydrate>
   </div>
 </template>
 
 <script>
-import { loadSsrOnly } from 'vue-lazy-hydration';
-
-const ResolvableUserSettingsForm = loadSsrOnly(() => import('./UserSettingsForm.vue'));
+import LazyHydrate from 'vue-lazy-hydration';
 
 export default {
   components: {
-    UserSettingsForm: ResolvableUserSettingsForm,
+    LazyHydrate,
+    UserSettingsForm: () => import('./UserSettingsForm.vue'),
   },
   data() {
     return {
       editModeActive: false,
     };
-  },
-  watch: {
-    // As soon as the value of `editModeActive` changes the
-    // `UserSettingsForm` component is loaded and hydrated
-    // so it becomes fully interactive.
-    editModeActive() {
-      if (ResolvableUserSettingsForm.lazyHydration.resolve) {
-        ResolvableUserSettingsForm.lazyHydration.resolve();
-      }
-    },
   },
   // ...
 };
@@ -149,9 +145,17 @@ export default {
 
 ![With lazy hydration.](https://res.cloudinary.com/maoberlehner/image/upload/c_scale,f_auto,q_auto,w_600/v1532158513/github/vue-lazy-hydration/lazy-hydration-demo-benchmark)
 
+## Caveats
+
+**This plugin will not work as advertised if you're not using it in combination with SSR.** Although it should work with every pre-rendering approach (like [Prerender SPA Plugin](https://github.com/chrisvfritz/prerender-spa-plugin), [Gridsome](https://gridsome.org/), ...) I've only tested it with [Nuxt.js](https://nuxtjs.org) so far.
+
 ## Articles
 
 - [How to Drastically Reduce Estimated Input Latency and Time to Interactive of SSR Vue.js Applications](https://markus.oberlehner.net/blog/how-to-drastically-reduce-estimated-input-latency-and-time-to-interactive-of-ssr-vue-applications/)
+
+## Credits
+
+The code of the current implementation of this package is based on a [similar package created by **Rahul Kadyan**](https://github.com/znck/lazy-hydration). Thanks to his code I'm finally able to build a clean solution for what I dreamed of when I created the [abomination](https://markus.oberlehner.net/blog/abomination-a-concept-for-a-static-html-dynamic-javascript-hybrid-application/).
 
 ## About
 

@@ -1,6 +1,6 @@
 {
   "name": "vue-lazy-hydration",
-  "version": "0.1.0-alpha.5",
+  "version": "1.0.0-beta.0",
   "description": "Lazy hydration of server-side rendered Vue.js components",
   "keywords": [
     "hydration",
@@ -12,9 +12,9 @@
   "homepage": "https://github.com/maoberlehner/vue-lazy-hydration",
   "license": "MIT",
   "scripts": {
-    "scripts:umd": "rollup --config --output.format umd --name vue-lazy-hydration --output.file dist/index.js src/index.js",
-    "scripts:es": "rollup --config --output.format es --name vue-lazy-hydration --output.file dist/index.esm.js src/index.js",
-    "scripts:minify": "uglifyjs --compress --mangle --comments --output dist/index.min.js dist/index.js && uglifyjs --compress --mangle --comments --output dist/index.esm.min.js dist/index.esm.js",
+    "scripts:umd": "rollup --config --output.format umd --name vue-lazy-hydration --output.file dist/LazyHydrate.js src/LazyHydrate.js",
+    "scripts:es": "rollup --config --output.format es --name vue-lazy-hydration --output.file dist/LazyHydrate.esm.js src/LazyHydrate.js",
+    "scripts:minify": "uglifyjs --compress --mangle --comments --output dist/LazyHydrate.min.js dist/LazyHydrate.js && uglifyjs --compress --mangle --comments --output dist/LazyHydrate.esm.min.js dist/LazyHydrate.esm.js",
     "scripts": "yarn run scripts:umd && yarn run scripts:es && yarn run scripts:minify",
     "build": "yarn run scripts",
     "lint:scripts": "eslint --ignore-path .gitignore .",
@@ -32,12 +32,10 @@
     "eslint-plugin-markdown": "^1.0.0",
     "rollup": "^1.1.0",
     "rollup-plugin-babel": "^4.3.0",
-    "uglify-es": "^3.3.9",
-    "vue": "^2.5.22",
-    "vue-template-compiler": "^2.5.22"
+    "uglify-es": "^3.3.9"
   },
-  "main": "dist/index.js",
-  "module": "dist/index.esm.js",
+  "main": "dist/LazyHydrate.js",
+  "module": "dist/LazyHydrate.esm.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/maoberlehner/vue-lazy-hydration"
