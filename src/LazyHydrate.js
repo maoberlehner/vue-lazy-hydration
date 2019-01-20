@@ -1,4 +1,5 @@
 const isServer = typeof window === `undefined`;
+const isBrowser = !isServer;
 let blockRenderHydration = true;
 let observer = null;
 
@@ -60,30 +61,6 @@ export default {
     interactionEvent() {
       return this.onInteraction === true ? `focus` : this.onInteraction;
     },
-  },
-  beforeCreate() {
-    if (isServer) return;
-
-    const { render } = this.$options;
-
-    this.$options.render = (...args) => {
-      // Hydrate the component if it is going to be re-rendered after
-      // the initial render. A re-render is triggered if a property of
-      // the child component changes for example.
-      if (!blockRenderHydration) {
-        this.hydrate();
-        blockRenderHydration = true;
-      }
-
-      // Special thanks to Rahul Kadyan for the following lines of code.
-      // https://github.com/znck
-      const vnode = render.apply(this, args);
-
-      vnode.asyncFactory = this.hydrated ? { resolved: true } : {};
-      vnode.isAsyncPlaceholder = !this.hydrated;
-
-      return vnode;
-    };
   },
   mounted() {
     if (this.$el.childElementCount === 0) {
@@ -159,10 +136,28 @@ export default {
     },
   },
   render(h) {
-    if (!this.hydrated) return h(`div`);
+    // Hydrate the component if it is going to be re-rendered after
+    // the initial render. A re-render is triggered if a property of
+    // the child component changes for example.
+    if (!blockRenderHydration) {
+      this.hydrate();
+      blockRenderHydration = true;
+    }
 
-    return this.$slots.default.length > 1
-      ? h(`div`, { style: { display: `contents` } }, this.$slots.default)
+    const children = this.$slots.default.length > 1
+      ? h(`div`, { staticStyle: `display: contents` }, this.$slots.default)
       : this.$slots.default[0];
+    const vnode = this.hydrated
+      ? children
+      : h(`div`);
+
+    // Special thanks to Rahul Kadyan for the following lines of code.
+    // https://github.com/znck
+    if (isBrowser) {
+      vnode.asyncFactory = this.hydrated ? { resolved: true } : {};
+      vnode.isAsyncPlaceholder = !this.hydrated;
+    }
+
+    return vnode;
   },
 };
