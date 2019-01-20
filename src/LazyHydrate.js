@@ -1,5 +1,6 @@
 const isServer = typeof window === `undefined`;
 const isBrowser = !isServer;
+const initialRenderTimeout = 800;
 let blockRenderHydration = true;
 let observer = null;
 
@@ -17,14 +18,14 @@ if (typeof IntersectionObserver !== `undefined`) {
   });
 }
 
+setTimeout(() => {
+  blockRenderHydration = false;
+}, initialRenderTimeout);
+
 export default {
   props: {
     idleTimeout: {
       default: 2000,
-      type: Number,
-    },
-    initialRenderTimeout: {
-      default: 800,
       type: Number,
     },
     onInteraction: {
@@ -73,10 +74,6 @@ export default {
       this.hydrate();
       return;
     }
-
-    setTimeout(() => {
-      blockRenderHydration = false;
-    }, this.initialRenderTimeout);
 
     if (this.ssrOnly) return;
 
