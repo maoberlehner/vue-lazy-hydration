@@ -157,6 +157,25 @@ export default {
 </script>
 ```
 
+#### Multiple root nodes
+
+Because of how this package works, it is not possible to nest multiple root nodes inside of a single `<LazyHydrate>`. But you can wrap multiple components with a `<div>`.
+
+```html
+<template>
+  <div class="MyComponent">
+    <LazyHydrate ssr-only>
+      <div>
+        <ArticleHeader/>
+        <ArticleContent/>
+        <ArticleMetaInfo/>
+        <ArticleFooter/>
+      </div>
+    </LazyHydrate>
+  </div>
+</template>
+```
+
 ## Benchmarks
 
 ### Without lazy hydration
