@@ -64,13 +64,6 @@ In the example below you can see the four hydration modes in action.
     <LazyHydrate on-interaction="click">
       <CommentForm :article-id="article.id"/>
     </LazyHydrate>
-    
-    <!-- You can also wrap multiple components if you don't mind a wrapper `<div>` -->
-    <LazyHydrate when-visible>
-      <ImageSlider/>
-      <ArticleContent :content="article.content"/>
-      <AdSlider/>
-    </LazyHydrate>
   </div>
 </template>
 
@@ -95,13 +88,38 @@ export default {
 3. Next we can see the `AdSlider` beneath the article content, this component will most likely not be visible initially so we can delay hydration until the point it becomes visible.
 4. At the very bottom of the page we want to render a `CommentForm` but because most people only read the article and don't leave a comment, we can save resources by only hydrating the component whenever it actually receives focus.
 
-#### Multiple root nodes
-
-Usually `vue-lazy-hydration` does not render a DOM element itself if only a single component is nested inside `<LazyHydrate>`. If you decide to render multiple components inside of a single `<LazyHydrate>` tag, a wrapper `<div>` with `style="display: contents"` is added. Adding `display: contents` makes that the wrapper `<div>` doesn't generate any box.
-
 ### Advanced
 
-#### Manualy trigger hydration
+#### Prevent JavaScript bundle loading
+
+```html
+<template>
+  <div class="ArticlePage">
+    <LazyHydrate on-interaction>
+      <CommentForm
+        slot-scope="{ hydrated }"
+        v-if="hydrated"
+        :article-id="article.id"
+      />
+    </LazyHydrate>
+  </div>
+</template>
+
+<script>
+import LazyHydrate from 'vue-lazy-hydration';
+
+export default {
+  components: {
+    LazyHydrate,
+    // The `CommentForm` is only imported if `hydrated` is true.
+    CommentForm: () => import('./CommentForm.vue'),
+  },
+  // ...
+};
+</script>
+```
+
+#### Manually trigger hydration
 
 Sometimes you might want to prevent a component from loading initially but you want to activate it on demand if a certain action is triggered. You can do this by manually triggering the component to hydrate like you can see in the following example.
 

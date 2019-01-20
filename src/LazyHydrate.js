@@ -144,8 +144,8 @@ export default {
       blockRenderHydration = true;
     }
 
-    const children = this.$slots.default.length > 1
-      ? h(`div`, { staticStyle: `display: contents` }, this.$slots.default)
+    const children = this.$scopedSlots.default
+      ? this.$scopedSlots.default({ hydrated: this.hydrated })
       : this.$slots.default[0];
     const vnode = this.hydrated
       ? children
