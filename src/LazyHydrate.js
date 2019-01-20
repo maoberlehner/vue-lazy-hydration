@@ -1,7 +1,5 @@
 const isServer = typeof window === `undefined`;
 const isBrowser = !isServer;
-const initialRenderTimeout = 800;
-let blockRenderHydration = true;
 let observer = null;
 
 if (typeof IntersectionObserver !== `undefined`) {
@@ -17,10 +15,6 @@ if (typeof IntersectionObserver !== `undefined`) {
     });
   });
 }
-
-setTimeout(() => {
-  blockRenderHydration = false;
-}, initialRenderTimeout);
 
 export default {
   props: {
@@ -142,14 +136,6 @@ export default {
     },
   },
   render(h) {
-    // Hydrate the component if it is going to be re-rendered after
-    // the initial render. A re-render is triggered if a property of
-    // the child component changes for example.
-    if (!blockRenderHydration) {
-      this.hydrate();
-      blockRenderHydration = true;
-    }
-
     const children = this.$scopedSlots.default
       ? this.$scopedSlots.default({ hydrated: this.hydrated })
       : this.$slots.default[0];
