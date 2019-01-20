@@ -112,7 +112,7 @@ Sometimes you might want to prevent a component from loading initially but you w
       Activate edit mode
     </button>
     <LazyHydrate ssr-only :trigger-hydration="editModeActive">
-      <UserSettingsForm :editable="editModeActive"/>
+      <UserSettingsForm/>
     </LazyHydrate>
   </div>
 </template>
