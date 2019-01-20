@@ -28,7 +28,7 @@ export default {
       type: Number,
     },
     onInteraction: {
-      type: [Boolean, String],
+      type: [Array, Boolean, String],
     },
     ssrOnly: {
       type: Boolean,
@@ -58,8 +58,13 @@ export default {
     },
   },
   computed: {
-    interactionEvent() {
-      return this.onInteraction === true ? `focus` : this.onInteraction;
+    interactionEvents() {
+      if (!this.onInteraction) return [];
+      if (this.onInteraction === true) return [`focus`];
+
+      return Array.isArray(this.onInteraction)
+        ? this.onInteraction
+        : [this.onInteraction];
     },
   },
   mounted() {
@@ -75,13 +80,17 @@ export default {
 
     if (this.ssrOnly) return;
 
-    if (this.interactionEvent) {
-      this.$el.addEventListener(this.interactionEvent, this.hydrate, {
+    this.interactionEvents.forEach((eventName) => {
+      this.$el.addEventListener(eventName, this.hydrate, {
         capture: true,
         once: true,
       });
-      this.interaction = () =>
-        this.$el.removeEventListener(this.interactionEvent, this.hydrate);
+    });
+    if (this.interactionEvents.length) {
+      this.interaction = () => {
+        this.interactionEvents.forEach(eventName =>
+          this.$el.removeEventListener(eventName, this.hydrate));
+      };
     }
 
     if (this.whenIdle) {

@@ -60,8 +60,12 @@ In the example below you can see the four hydration modes in action.
     <LazyHydrate on-interaction>
       <CommentForm :article-id="article.id"/>
     </LazyHydrate>
-    <!-- ... but you can listen for any event you want. -->
+    <!-- ... but you can listen for any event you want ... -->
     <LazyHydrate on-interaction="click">
+      <CommentForm :article-id="article.id"/>
+    </LazyHydrate>
+    <!-- ... or even multiple events. -->
+    <LazyHydrate :on-interaction="['click', 'touchstart']">
       <CommentForm :article-id="article.id"/>
     </LazyHydrate>
   </div>
