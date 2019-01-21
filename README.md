@@ -192,6 +192,7 @@ Because of how this package works, it is not possible to nest multiple root node
 
 ## Articles
 
+- [abomination: a Concept for a Static HTML / Dynamic JavaScript Hybrid Application](https://markus.oberlehner.net/blog/abomination-a-concept-for-a-static-html-dynamic-javascript-hybrid-application/)
 - [How to Drastically Reduce Estimated Input Latency and Time to Interactive of SSR Vue.js Applications](https://markus.oberlehner.net/blog/how-to-drastically-reduce-estimated-input-latency-and-time-to-interactive-of-ssr-vue-applications/)
 
 ## Credits
