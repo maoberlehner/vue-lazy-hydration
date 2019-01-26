@@ -136,12 +136,13 @@ export default {
     },
   },
   render(h) {
+    const tag = this.$el ? this.$el.tagName : `div`;
     const children = this.$scopedSlots.default
       ? this.$scopedSlots.default({ hydrated: this.hydrated })
       : this.$slots.default[0];
     const vnode = this.hydrated
       ? children
-      : h(`div`);
+      : h(tag);
 
     // Special thanks to Rahul Kadyan for the following lines of code.
     // https://github.com/znck
