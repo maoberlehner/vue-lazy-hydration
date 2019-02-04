@@ -177,7 +177,7 @@ Internally the [Intersection Observer API](https://developer.mozilla.org/en-US/d
 ```html
 <template>
   <div class="MyComponent">
-    <LazyHydrate when-visible="{ rootMargin: '100px' }">
+    <LazyHydrate :when-visible="{ rootMargin: '100px' }">
       <ArticleFooter/>
     </LazyHydrate>
   </div>
