@@ -176,6 +176,22 @@ Because of how this package works, it is not possible to nest multiple root node
 </template>
 ```
 
+#### Intersection Obersver options
+
+Internally the [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/IntersectionObserver) is used to determine if a component is visible or not. You can provide Intersection Observer options to the `when-visible` property to configure the Intersection Observer.
+
+```html
+<template>
+  <div class="MyComponent">
+    <LazyHydrate when-visible="{ rootMargin: '100px' }">
+      <ArticleFooter/>
+    </LazyHydrate>
+  </div>
+</template>
+```
+
+For a list of possible options please [take a look at the Intersection Observer API documentation on MDN](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/IntersectionObserver).
+
 ## Benchmarks
 
 ### Without lazy hydration

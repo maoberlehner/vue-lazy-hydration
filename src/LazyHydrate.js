@@ -1,9 +1,15 @@
 const isServer = typeof window === `undefined`;
 const isBrowser = !isServer;
-let observer = null;
 
-if (typeof IntersectionObserver !== `undefined`) {
-  observer = new IntersectionObserver((entries) => {
+const observers = new Map();
+
+function createObserver(options) {
+  if (typeof IntersectionObserver === `undefined`) return null;
+
+  const optionKey = JSON.stringify(options);
+  if (observers.has(optionKey)) return observers.get(optionKey);
+
+  const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       // Use `intersectionRatio` because of Edge 15's
       // lack of support for `isIntersecting`.
@@ -13,7 +19,10 @@ if (typeof IntersectionObserver !== `undefined`) {
 
       entry.target.parentElement.hydrate();
     });
-  });
+  }, options);
+  observers.set(optionKey, observer);
+
+  return observer;
 }
 
 export default {
@@ -36,7 +45,7 @@ export default {
       type: Boolean,
     },
     whenVisible: {
-      type: Boolean,
+      type: [Boolean, Object],
     },
   },
   data() {
@@ -101,6 +110,9 @@ export default {
     }
 
     if (this.whenVisible) {
+      const options = this.whenVisible === true ? {} : this.whenVisible;
+      const observer = createObserver(options);
+
       // If Intersection Observer API is not supported, hydrate immediately.
       if (!observer) {
         this.hydrate();
