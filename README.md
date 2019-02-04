@@ -7,12 +7,6 @@
 
 > Lazy hydration of server-side rendered Vue.js components.
 
-## WARNING: Beta stage
-
-This plugin is currently in an early beta stage. Although everything seems to work fine in combination with the applications I tested it with, there might be certain cases I haven't considered. I'd be very happy if you test it with your own projects and report back if it works for you.
-
-**Use at your own risk.**
-
 ## Motivation
 
 `vue-lazy-hydration` is a renderless Vue.js component to **improve Estimated Input Latency and Time to Interactive** of server-side rendered Vue.js applications. This can be achieved **by using lazy hydration to delay the hydration of pre-rendered HTML**.
