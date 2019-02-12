@@ -27,7 +27,7 @@
     "@babel/core": "^7.2.2",
     "@babel/preset-env": "^7.3.1",
     "eslint": "^5.13.0",
-    "eslint-plugin-compat": "^2.6.3",
+    "eslint-plugin-compat": "^2.7.0",
     "eslint-plugin-import": "^2.16.0",
     "eslint-plugin-markdown": "^1.0.0",
     "rollup": "^1.1.2",
