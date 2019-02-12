@@ -100,6 +100,16 @@ export default {
         :article-id="article.id"
       />
     </LazyHydrate>
+    <!-- Or using new Vue.js 2.6.x v-slot syntax -->
+    <LazyHydrate
+      v-slot="{ hydrated }"
+      on-interaction
+    >
+      <CommentForm
+        v-if="hydrated"
+        :article-id="article.id"
+      />
+    </LazyHydrate>
   </div>
 </template>
 
