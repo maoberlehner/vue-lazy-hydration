@@ -31,7 +31,7 @@ export default {
 };
 ```
 
-### Basic example
+## Basic example
 
 In the example below you can see the four hydration modes in action.
 
@@ -86,9 +86,9 @@ export default {
 3. Next we can see the `AdSlider` beneath the article content, this component will most likely not be visible initially so we can delay hydration until the point it becomes visible.
 4. At the very bottom of the page we want to render a `CommentForm` but because most people only read the article and don't leave a comment, we can save resources by only hydrating the component whenever it actually receives focus.
 
-### Advanced
+## Advanced
 
-#### Prevent JavaScript bundle loading
+### Prevent JavaScript bundle loading
 
 ```html
 <template>
@@ -127,7 +127,7 @@ export default {
 </script>
 ```
 
-#### Manually trigger hydration
+### Manually trigger hydration
 
 Sometimes you might want to prevent a component from loading initially but you want to activate it on demand if a certain action is triggered. You can do this by manually triggering the component to hydrate like you can see in the following example.
 
@@ -161,7 +161,7 @@ export default {
 </script>
 ```
 
-#### Multiple root nodes
+### Multiple root nodes
 
 Because of how this package works, it is not possible to nest multiple root nodes inside of a single `<LazyHydrate>`. But you can wrap multiple components with a `<div>`.
 
@@ -180,7 +180,7 @@ Because of how this package works, it is not possible to nest multiple root node
 </template>
 ```
 
-#### Intersection Obersver options
+### Intersection Obersver options
 
 Internally the [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/IntersectionObserver) is used to determine if a component is visible or not. You can provide Intersection Observer options to the `when-visible` property to configure the Intersection Observer.
 
