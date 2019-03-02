@@ -196,6 +196,59 @@ Internally the [Intersection Observer API](https://developer.mozilla.org/en-US/d
 
 For a list of possible options please [take a look at the Intersection Observer API documentation on MDN](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/IntersectionObserver).
 
+## Import Wrappers
+
+> **Attention:** because of [a bug in Vue.js <= v2.6.7](https://github.com/vuejs/vue/pull/9572) Import Wrappers require that you have at least version **v2.6.8** of Vue.js installed otherwise they will not work correctly in certain situations (especially in combination with Vue Router).
+
+Additionally to the `<LazyHydrate>` wrapper component you can also use Import Wrappers to lazy load and hydrate certain components.
+
+```html
+<template>
+  <div class="ArticlePage">
+    <ImageSlider/>
+    <ArticleContent :content="article.content"/>
+    <AdSlider/>
+    <CommentForm :article-id="article.id"/>
+  </div>
+</template>
+
+<script>
+import {
+  hydrateOnInteraction,
+  hydrateSsrOnly,
+  hydrateWhenIdle,
+  hydrateWhenVisible,
+} from 'vue-lazy-hydration';
+
+export default {
+  components: {
+    AdSlider: hydrateWhenVisible(
+      () => import('./AdSlider.vue'),
+      // Optional.
+      { observerOptions: { rootMargin: '100px' } },
+    ),
+    ArticleContent: hydrateSsrOnly(
+      () => import('./ArticleContent.vue'),
+      { ignoredProps: ['content'] },
+    ),
+    CommentForm: hydrateOnInteraction(
+      () => import('./CommentForm.vue'),
+      // `focus` is the default event.
+      { event: 'focus', ignoredProps: ['articleId'] },
+    ),
+    ImageSlider: hydrateWhenIdle(() => import('./ImageSlider.vue')),
+  },
+  // ...
+};
+</script>
+```
+
+### Caveats
+
+1. Properties passed to a wrapped component are rendered as an HTML attribute on the root element.  
+   E.g. `<ArticleContent :content="article.content"/>` would render to `<div class="ArticleContent" content="Lorem ipsum dolor ...">Lorem ipsum dolor ...</div>` as long as you don't provide `content` as an ignored property the way you can see in the example above.
+2. When using `hydrateWhenVisible` and `hydrateOnInteraction` all instances of a certain component are immediately hydrated as soon as one of the instances becomes visible or is interacted with.
+
 ## Benchmarks
 
 ### Without lazy hydration

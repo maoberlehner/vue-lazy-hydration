@@ -1,28 +1,111 @@
+import {
+  createObserver,
+  loadingComponentFactory,
+  resolvableComponentFactory,
+} from './utils';
+
 const isServer = typeof window === `undefined`;
 const isBrowser = !isServer;
 
-const observers = new Map();
+export function hydrateWhenIdle(component, { ignoredProps }) {
+  if (isServer) return component;
 
-function createObserver(options) {
-  if (typeof IntersectionObserver === `undefined`) return null;
+  const resolvableComponent = resolvableComponentFactory(component);
+  const loading = loadingComponentFactory(resolvableComponent, {
+    props: ignoredProps,
+    mounted() {
+      // If `requestIdleCallback()` or `requestAnimationFrame()`
+      // is not supported, hydrate immediately.
+      if (!(`requestIdleCallback` in window) || !(`requestAnimationFrame` in window)) {
+        // eslint-disable-next-line no-underscore-dangle
+        resolvableComponent._resolve();
+        return;
+      }
 
-  const optionKey = JSON.stringify(options);
-  if (observers.has(optionKey)) return observers.get(optionKey);
+      const id = requestIdleCallback(() => {
+        // eslint-disable-next-line no-underscore-dangle
+        requestAnimationFrame(resolvableComponent._resolve);
+      }, { timeout: this.idleTimeout });
+      const cleanup = () => cancelIdleCallback(id);
+      resolvableComponent.then(cleanup);
+    },
+  });
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      // Use `intersectionRatio` because of Edge 15's
-      // lack of support for `isIntersecting`.
-      // See: https://github.com/w3c/IntersectionObserver/issues/211
-      const isIntersecting = entry.isIntersecting || entry.intersectionRatio > 0;
-      if (!isIntersecting || !entry.target.parentElement.hydrate) return;
+  return () => ({
+    component: resolvableComponent,
+    delay: 0,
+    loading,
+  });
+}
 
-      entry.target.parentElement.hydrate();
-    });
-  }, options);
-  observers.set(optionKey, observer);
+export function hydrateWhenVisible(component, { ignoredProps, observerOptions }) {
+  if (isServer) return component;
 
-  return observer;
+  const resolvableComponent = resolvableComponentFactory(component);
+  const observer = createObserver(observerOptions);
+
+  const loading = loadingComponentFactory(resolvableComponent, {
+    props: ignoredProps,
+    mounted() {
+      // If Intersection Observer API is not supported, hydrate immediately.
+      if (!observer) {
+        // eslint-disable-next-line no-underscore-dangle
+        resolvableComponent._resolve();
+        return;
+      }
+
+      // eslint-disable-next-line no-underscore-dangle
+      this.$el.hydrate = resolvableComponent._resolve;
+      const cleanup = () => observer.unobserve(this.$el);
+      resolvableComponent.then(cleanup);
+      observer.observe(this.$el);
+    },
+  });
+
+  return () => ({
+    component: resolvableComponent,
+    delay: 0,
+    loading,
+  });
+}
+
+export function hydrateSsrOnly(component) {
+  if (isServer) return component;
+
+  const resolvableComponent = resolvableComponentFactory(component);
+  const loading = loadingComponentFactory(resolvableComponent);
+
+  return () => ({
+    component: resolvableComponent,
+    delay: 0,
+    loading,
+  });
+}
+
+export function hydrateOnInteraction(component, { event = `focus`, ignoredProps }) {
+  if (isServer) return component;
+
+  const resolvableComponent = resolvableComponentFactory(component);
+  const events = Array.isArray(event) ? event : [event];
+
+  const loading = loadingComponentFactory(resolvableComponent, {
+    props: ignoredProps,
+    mounted() {
+      events.forEach((eventName) => {
+        // eslint-disable-next-line no-underscore-dangle
+        this.$el.addEventListener(eventName, resolvableComponent._resolve, {
+          capture: true,
+          once: true,
+        });
+      });
+    },
+  });
+
+  return () => ({
+    component: resolvableComponent,
+    delay: 0,
+    loading,
+  });
 }
 
 export default {
