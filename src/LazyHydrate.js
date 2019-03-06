@@ -203,7 +203,7 @@ export default {
       }
 
       this.$el.hydrate = this.hydrate;
-      observer.observe(this.$el.children[0]);
+      observer.observe(this.$el);
 
       this.visible = () => {
         observer.unobserve(this.$el);
