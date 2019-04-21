@@ -7,7 +7,7 @@ import {
 const isServer = typeof window === `undefined`;
 const isBrowser = !isServer;
 
-export function hydrateWhenIdle(component, { ignoredProps }) {
+export function hydrateWhenIdle(component, { ignoredProps } = {}) {
   if (isServer) return component;
 
   const resolvableComponent = resolvableComponentFactory(component);
@@ -38,7 +38,7 @@ export function hydrateWhenIdle(component, { ignoredProps }) {
   });
 }
 
-export function hydrateWhenVisible(component, { ignoredProps, observerOptions }) {
+export function hydrateWhenVisible(component, { ignoredProps, observerOptions } = {}) {
   if (isServer) return component;
 
   const resolvableComponent = resolvableComponentFactory(component);
@@ -82,7 +82,7 @@ export function hydrateSsrOnly(component) {
   });
 }
 
-export function hydrateOnInteraction(component, { event = `focus`, ignoredProps }) {
+export function hydrateOnInteraction(component, { event = `focus`, ignoredProps } = {}) {
   if (isServer) return component;
 
   const resolvableComponent = resolvableComponentFactory(component);
