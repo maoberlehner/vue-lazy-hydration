@@ -14,8 +14,8 @@
   },
   "settings": {
     "polyfills": [
-      "intersectionobserver",
-      "promises"
+      "IntersectionObserver",
+      "Promise"
     ]
   }
 }
