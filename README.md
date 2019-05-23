@@ -94,6 +94,8 @@ export default {
 
 > **Attention:** If your setup depends on the [Vue.js template-renderer](https://github.com/vuejs/vue/tree/dev/src/server/template-renderer) for server side rendering (which is the case for Nuxt.js and Gridsome), this technique currently doesn't work and JavaScript bundles are immediately loaded. See [vuejs/vue#9847](https://github.com/vuejs/vue/issues/9847) for the progress on this.
 
+> **Attention:** There currently seems to be a problem with this approach in certain circumstances. See [#19](https://github.com/maoberlehner/vue-lazy-hydration/issues/19) for more information.
+
 ```html
 <template>
   <div class="ArticlePage">
