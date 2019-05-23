@@ -92,7 +92,7 @@ export default {
 
 ### Prevent JavaScript bundle loading
 
-> If your setup depends on the [Vue.js template-renderer](https://github.com/vuejs/vue/tree/dev/src/server/template-renderer) for server side rendering (which is the case for Nuxt.js and Gridsome for example), this technique currently doesn't work and JavaScript bundles are immediately loaded. See [vuejs/vue#9847](https://github.com/vuejs/vue/issues/9847) for the progress on this.
+> **Attention:** If your setup depends on the [Vue.js template-renderer](https://github.com/vuejs/vue/tree/dev/src/server/template-renderer) for server side rendering (which is the case for Nuxt.js and Gridsome), this technique currently doesn't work and JavaScript bundles are immediately loaded. See [vuejs/vue#9847](https://github.com/vuejs/vue/issues/9847) for the progress on this.
 
 ```html
 <template>
