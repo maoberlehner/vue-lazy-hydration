@@ -41,8 +41,8 @@ export function resolvableComponentFactory(component) {
     resolve = newResolve;
   });
   // eslint-disable-next-line no-underscore-dangle
-  promise._resolve = async () => {
-    resolve(typeof component === `function` ? await component() : component);
+  promise._resolve = () => {
+    resolve(typeof component === `function` ? component() : component);
   };
 
   return promise;
