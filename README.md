@@ -1,6 +1,6 @@
 # vue-lazy-hydration
 
-[![Patreon](https://img.shields.io/badge/patreon-donate-blue.svg)](https://www.patreon.com/maoberlehner)
+[![Backers on Open Collective](https://opencollective.com/vue-lazy-hydration/backers/badge.svg)](#backers) [![Sponsors on Open Collective](https://opencollective.com/vue-lazy-hydration/sponsors/badge.svg)](#sponsors) [![Patreon](https://img.shields.io/badge/patreon-donate-blue.svg)](https://www.patreon.com/maoberlehner)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-blue.svg)](https://paypal.me/maoberlehner)
 [![Build Status](https://travis-ci.org/maoberlehner/vue-lazy-hydration.svg?branch=master)](https://travis-ci.org/maoberlehner/vue-lazy-hydration)
 [![GitHub stars](https://img.shields.io/github/stars/maoberlehner/vue-lazy-hydration.svg?style=social&label=Star)](https://github.com/maoberlehner/vue-lazy-hydration)
@@ -287,6 +287,36 @@ Website: https://markus.oberlehner.net
 Twitter: https://twitter.com/MaOberlehner  
 PayPal.me: https://paypal.me/maoberlehner  
 Patreon: https://www.patreon.com/maoberlehner
+
+## Contributors
+
+This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
+<a href="https://github.com/maoberlehner/vue-lazy-hydration/graphs/contributors"><img src="https://opencollective.com/vue-lazy-hydration/contributors.svg?width=890&button=false" /></a>
+
+
+## Backers
+
+Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/vue-lazy-hydration#backer)]
+
+<a href="https://opencollective.com/vue-lazy-hydration#backers" target="_blank"><img src="https://opencollective.com/vue-lazy-hydration/backers.svg?width=890"></a>
+
+
+## Sponsors
+
+Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [[Become a sponsor](https://opencollective.com/vue-lazy-hydration#sponsor)]
+
+<a href="https://opencollective.com/vue-lazy-hydration/sponsor/0/website" target="_blank"><img src="https://opencollective.com/vue-lazy-hydration/sponsor/0/avatar.svg"></a>
+<a href="https://opencollective.com/vue-lazy-hydration/sponsor/1/website" target="_blank"><img src="https://opencollective.com/vue-lazy-hydration/sponsor/1/avatar.svg"></a>
+<a href="https://opencollective.com/vue-lazy-hydration/sponsor/2/website" target="_blank"><img src="https://opencollective.com/vue-lazy-hydration/sponsor/2/avatar.svg"></a>
+<a href="https://opencollective.com/vue-lazy-hydration/sponsor/3/website" target="_blank"><img src="https://opencollective.com/vue-lazy-hydration/sponsor/3/avatar.svg"></a>
+<a href="https://opencollective.com/vue-lazy-hydration/sponsor/4/website" target="_blank"><img src="https://opencollective.com/vue-lazy-hydration/sponsor/4/avatar.svg"></a>
+<a href="https://opencollective.com/vue-lazy-hydration/sponsor/5/website" target="_blank"><img src="https://opencollective.com/vue-lazy-hydration/sponsor/5/avatar.svg"></a>
+<a href="https://opencollective.com/vue-lazy-hydration/sponsor/6/website" target="_blank"><img src="https://opencollective.com/vue-lazy-hydration/sponsor/6/avatar.svg"></a>
+<a href="https://opencollective.com/vue-lazy-hydration/sponsor/7/website" target="_blank"><img src="https://opencollective.com/vue-lazy-hydration/sponsor/7/avatar.svg"></a>
+<a href="https://opencollective.com/vue-lazy-hydration/sponsor/8/website" target="_blank"><img src="https://opencollective.com/vue-lazy-hydration/sponsor/8/avatar.svg"></a>
+<a href="https://opencollective.com/vue-lazy-hydration/sponsor/9/website" target="_blank"><img src="https://opencollective.com/vue-lazy-hydration/sponsor/9/avatar.svg"></a>
+
+
 
 ### License
 
