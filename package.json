@@ -20,7 +20,8 @@
     "lint:scripts": "eslint --ignore-path .gitignore .",
     "lint:scripts-md": "eslint --config .eslintrc-md.json --ext md --ignore-path .gitignore .",
     "lint": "yarn run lint:scripts && yarn run lint:scripts-md",
-    "prepublishOnly": "yarn run lint && yarn run build"
+    "prepublishOnly": "yarn run lint && yarn run build",
+    "postinstall": "opencollective-postinstall"
   },
   "devDependencies": {
     "@avalanche/eslint-config": "^3.0.0",
@@ -47,5 +48,13 @@
     "> 0.5%",
     "not ie <= 10",
     "not op_mini all"
-  ]
+  ],
+  "dependencies": {
+    "opencollective-postinstall": "^2.0.2",
+    "opencollective": "^1.0.3"
+  },
+  "collective": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/vue-lazy-hydration"
+  }
 }
