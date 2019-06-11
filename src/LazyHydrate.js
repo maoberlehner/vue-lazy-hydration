@@ -231,10 +231,13 @@ export default {
     },
   },
   render(h) {
-    const tag = this.$el ? this.$el.tagName : `div`;
     const child = this.$scopedSlots.default
       ? this.$scopedSlots.default({ hydrated: this.hydrated })
       : this.$slots.default[0];
+
+    if (isServer) return child;
+
+    const tag = this.$el ? this.$el.tagName : `div`;
     const vnode = this.hydrated
       ? child
       : h(tag);
