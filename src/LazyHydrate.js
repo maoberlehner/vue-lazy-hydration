@@ -5,7 +5,6 @@ import {
 } from './utils';
 
 const isServer = typeof window === `undefined`;
-const isBrowser = !isServer;
 
 export function hydrateWhenIdle(component, { ignoredProps } = {}) {
   if (isServer) return component;
@@ -238,15 +237,13 @@ export default {
     if (isServer) return child;
 
     const tag = this.$el ? this.$el.tagName : `div`;
-    const vnode = this.hydrated
-      ? child
-      : h(tag);
+    const vnode = this.hydrated ? child : h(tag);
 
     // Special thanks to Rahul Kadyan for the following lines of code.
     // https://github.com/znck
-    if (isBrowser) {
-      vnode.asyncFactory = this.hydrated ? { resolved: true } : {};
-      vnode.isAsyncPlaceholder = !this.hydrated;
+    if (!this.hydrated) {
+      vnode.asyncFactory = {};
+      vnode.isComment = true;
     }
 
     return vnode;
