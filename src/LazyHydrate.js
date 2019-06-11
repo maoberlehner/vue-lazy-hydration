@@ -234,17 +234,14 @@ export default {
       ? this.$scopedSlots.default({ hydrated: this.hydrated })
       : this.$slots.default[0];
 
-    if (isServer) return child;
+    if (this.hydrated) return child;
 
     const tag = this.$el ? this.$el.tagName : `div`;
-    const vnode = this.hydrated ? child : h(tag);
-
+    const vnode = h(tag);
     // Special thanks to Rahul Kadyan for the following lines of code.
     // https://github.com/znck
-    if (!this.hydrated) {
-      vnode.asyncFactory = {};
-      vnode.isComment = true;
-    }
+    vnode.asyncFactory = {};
+    vnode.isComment = true;
 
     return vnode;
   },
