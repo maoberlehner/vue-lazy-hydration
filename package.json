@@ -27,10 +27,10 @@
     "@babel/core": "^7.4.5",
     "@babel/preset-env": "^7.4.5",
     "eslint": "^5.16.0",
-    "eslint-plugin-compat": "^3.1.1",
+    "eslint-plugin-compat": "^3.1.2",
     "eslint-plugin-import": "^2.17.3",
     "eslint-plugin-markdown": "^1.0.0",
-    "rollup": "^1.15.1",
+    "rollup": "^1.15.6",
     "rollup-plugin-babel": "^4.3.2",
     "uglify-es": "^3.3.9"
   },
