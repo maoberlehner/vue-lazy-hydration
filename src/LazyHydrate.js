@@ -170,8 +170,9 @@ export default {
     });
     if (this.interactionEvents.length) {
       this.interaction = () => {
-        this.interactionEvents.forEach(eventName =>
-          this.$el.removeEventListener(eventName, this.hydrate));
+        this.interactionEvents.forEach(
+          eventName => this.$el.removeEventListener(eventName, this.hydrate),
+        );
       };
     }
 

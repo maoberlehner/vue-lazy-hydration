@@ -23,15 +23,15 @@
     "prepublishOnly": "yarn run lint && yarn run build"
   },
   "devDependencies": {
-    "@avalanche/eslint-config": "^3.0.0",
-    "@babel/core": "^7.4.5",
-    "@babel/preset-env": "^7.4.5",
-    "eslint": "^5.16.0",
-    "eslint-plugin-compat": "^3.1.2",
-    "eslint-plugin-import": "^2.17.3",
+    "@avalanche/eslint-config": "^4.0.0",
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "eslint": "^6.2.1",
+    "eslint-plugin-compat": "^3.3.0",
+    "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-markdown": "^1.0.0",
-    "rollup": "^1.15.6",
-    "rollup-plugin-babel": "^4.3.2",
+    "rollup": "^1.19.4",
+    "rollup-plugin-babel": "^4.3.3",
     "uglify-es": "^3.3.9"
   },
   "main": "dist/LazyHydrate.js",
