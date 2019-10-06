@@ -7,11 +7,11 @@ declare const LazyHydrate: Component<
     hydrate(): void
   },
   {
-    interactionEvents: []
+    interactionEvents: string[]
   },
   {
     idleTimeout: number
-    onInteraction: boolean | string | []
+    onInteraction: boolean | string | string[]
     ssrOnly: boolean
     triggerHydration: boolean
     whenIdle: boolean
