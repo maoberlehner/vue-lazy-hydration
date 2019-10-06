@@ -24,13 +24,13 @@
   },
   "devDependencies": {
     "@avalanche/eslint-config": "^4.0.0",
-    "@babel/core": "^7.5.5",
-    "@babel/preset-env": "^7.5.5",
-    "eslint": "^6.2.1",
+    "@babel/core": "^7.6.2",
+    "@babel/preset-env": "^7.6.2",
+    "eslint": "^6.5.1",
     "eslint-plugin-compat": "^3.3.0",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-markdown": "^1.0.0",
-    "rollup": "^1.19.4",
+    "rollup": "^1.23.1",
     "rollup-plugin-babel": "^4.3.3",
     "uglify-es": "^3.3.9"
   },
