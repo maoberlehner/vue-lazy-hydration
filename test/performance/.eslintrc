@@ -1,0 +1,24 @@
+{
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 9
+  },
+  "extends": [
+    "plugin:vue/recommended",
+    "@avalanche/eslint-config"
+  ],
+  "rules": {
+    "vue/component-name-in-template-casing": ["error",
+      "PascalCase"
+    ],
+    "vue/no-v-html": "off",
+    "vue/html-closing-bracket-spacing": ["error", {
+      "startTag": "never",
+      "endTag": "never",
+      "selfClosingTag": "never"
+    }]
+  }
+}
