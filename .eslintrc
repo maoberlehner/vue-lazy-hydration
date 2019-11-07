@@ -15,6 +15,7 @@
   "settings": {
     "polyfills": [
       "IntersectionObserver",
+      "Map",
       "Promise"
     ]
   }
