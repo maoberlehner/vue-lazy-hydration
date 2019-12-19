@@ -186,6 +186,8 @@ Because of how this package works, it is not possible to nest multiple root node
 </template>
 ```
 
+The (one and only) immediate child of ```<LazyHydrate>``` must always exist, i.e. there can be no ```v-if``` on the ```<div>``` (if the ```v-if``` is needed, it needs to be on the ```<LazyHydrate>```)
+
 ### Intersection Observer options
 
 Internally the [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/IntersectionObserver) is used to determine if a component is visible or not. You can provide Intersection Observer options to the `when-visible` property to configure the Intersection Observer.
