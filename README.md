@@ -291,6 +291,15 @@ npm run test:integration:build
 npm run test:integration
 ```
 
+### Performance tests
+
+Execute the following commands to run the performance benchmark:
+
+```bash
+npm run test:perf:build
+npm run test:perf
+```
+
 ## About
 
 ### Author
