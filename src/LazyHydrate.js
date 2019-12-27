@@ -231,6 +231,8 @@ export default {
     },
   },
   render(h) {
+    if (!this.$scopedSlots.default && !this.$slots.default) return null;
+
     const child = this.$scopedSlots.default
       ? this.$scopedSlots.default({ hydrated: this.hydrated })
       : this.$slots.default[0];
