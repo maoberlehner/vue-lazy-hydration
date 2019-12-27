@@ -278,6 +278,19 @@ export default {
 
 The code of the current implementation of this package is based on a [similar package created by **Rahul Kadyan**](https://github.com/znck/lazy-hydration). Thanks to his code I'm finally able to build a clean solution for what I dreamed of when I created the [abomination](https://markus.oberlehner.net/blog/abomination-a-concept-for-a-static-html-dynamic-javascript-hybrid-application/).
 
+## Testing
+
+Because the core functionality of `vue-lazy-hydration` heavily relies on browser APIs like `IntersectionObserver` and `requestIdleCallback()`, it is tough to write meaningful unit tests without having to write numerous mocks. Because of that, we mostly use integration tests and some performance benchmarks to test the functionality of this package.
+
+### Integration tests
+
+Execute the following commands to run the integration tests:
+
+```bash
+npm run test:integration:build
+npm run test:integration
+```
+
 ## About
 
 ### Author

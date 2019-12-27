@@ -5,12 +5,25 @@
     "jest": true
   },
   "parserOptions": {
-    "ecmaVersion": 9
+    "ecmaVersion": 9,
+    "parser": "babel-eslint"
   },
   "plugins": ["compat"],
-  "extends": "@avalanche/eslint-config",
+  "extends": [
+    "plugin:vue/recommended",
+    "@avalanche/eslint-config"
+  ],
   "rules": {
-    "compat/compat": 2
+    "compat/compat": 2,
+    "vue/component-name-in-template-casing": ["error",
+      "PascalCase"
+    ],
+    "vue/no-v-html": "off",
+    "vue/html-closing-bracket-spacing": ["error", {
+      "startTag": "never",
+      "endTag": "never",
+      "selfClosingTag": "never"
+    }]
   },
   "settings": {
     "polyfills": [
