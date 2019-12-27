@@ -6,6 +6,8 @@
 babel.config.js
 CODE_OF_CONDUCT.md
 CONTRIBUTING.md
+jest-puppeteer.config.js
+jest.config.js
 rollup.config.js
 
 test
