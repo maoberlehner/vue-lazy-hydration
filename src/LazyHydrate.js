@@ -240,7 +240,18 @@ export default {
     if (this.hydrated) return child;
 
     const tag = this.$el ? this.$el.tagName : `div`;
-    const vnode = h(tag);
+
+    let data = {};
+
+    // When we are not hydrated client side in an SSR app, make sure we proxy
+    // along classes/attrs from the SSR element.  Fixes #34.
+    if (this.$el) {
+      data.attrs = Array.from(this.$el.attributes)
+          .reduce((acc, { name, value }) => Object.assign(acc, { [name]: value }), {}),
+      data.class = Array.from(this.$el.classList);
+    }
+
+    const vnode = h(tag, data);
     // Special thanks to Rahul Kadyan for the following lines of code.
     // https://github.com/znck
     vnode.asyncFactory = {};
