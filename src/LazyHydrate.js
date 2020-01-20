@@ -246,9 +246,13 @@ export default {
     // When we are not hydrated client side in an SSR app, make sure we proxy
     // along classes/attrs from the SSR element.  Fixes #34.
     if (this.$el) {
+      const staticClasses = this.$vnode && this.$vnode.data && this.$vnode.data.staticClass ?
+        this.$vnode.data.staticClass.split(' ') :
+        [];
       data.attrs = Array.from(this.$el.attributes)
           .reduce((acc, { name, value }) => Object.assign(acc, { [name]: value }), {}),
-      data.class = Array.from(this.$el.classList);
+      // Proxy classes but avoid duping static classes on the LazyHydrate element
+      data.class = Array.from(this.$el.classList).filter(cls => !staticClasses.includes(cls));
     }
 
     const vnode = h(tag, data);
