@@ -239,14 +239,16 @@ export default {
 
     if (this.hydrated) return child;
 
-    const { data } = this.$vnode;
-    if (data.staticClass || data.class || (data.attrs && Object.keys(data.attrs).length > 0)) {
-      console.warn(
-        '[warning] Classes/Attributes placed on directly on the LazyHydrate component ' +
-        'will not be proxied to slot contents because it is a renderless component.  ' +
-        'Instead, classes/attributes should be placed on your slot content or on ' +
-        'container elements.'
-      );
+    if (process.env.NODE_ENV !== 'production') {
+      const { data } = this.$vnode;
+      if (data.staticClass || data.class || (data.attrs && Object.keys(data.attrs).length > 0)) {
+        console.warn(
+          '[warning] Classes/Attributes placed on directly on the LazyHydrate component ' +
+          'will not be proxied to slot contents because it is a renderless component.  ' +
+          'Instead, classes/attributes should be placed on your slot content or on ' +
+          'container elements.'
+        );
+      }
     }
 
     const tag = this.$el ? this.$el.tagName : `div`;
