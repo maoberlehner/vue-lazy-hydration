@@ -31,6 +31,12 @@ export function loadingComponentFactory(resolvableComponent, options) {
 
       return h(tag);
     },
+		directives: this.$vnode.data && this.$vnode.data.directives,
+		style: this.$vnode.data && [this.$vnode.data.style, this.$vnode.data.staticStyle],
+		class: this.$vnode.data && [
+			this.$vnode.data.class,
+			this.$vnode.data.staticClass
+		],
     ...options,
   };
 }
