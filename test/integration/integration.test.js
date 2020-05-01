@@ -73,7 +73,9 @@ describe(`integration`, () => {
 
       let classAttribute = await page.$('#DummyInteractionFct');
 
-      expect(classAttribute._remoteObject.description).toBe('div#DummyInteractionFct.additional.DummyInteraction');
+      expect(classAttribute._remoteObject.description).toMatch(/#DummyInteractionFct/);
+      expect(classAttribute._remoteObject.description).toMatch(/\.additional/);
+      expect(classAttribute._remoteObject.description).toMatch(/\.DummyInteraction/);
     });
 
     test(`It should hydrate the component when an interaction happens.`, async () => {
