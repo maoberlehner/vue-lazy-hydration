@@ -71,10 +71,13 @@ describe(`integration`, () => {
     test(`It should apply valid classes while not hydrated.`, async () => {
       await open(`/integration.html`);
 
-      let classAttribute = await page.$('#DummyInteractionFct');
+      const classAttribute = await page.$(`#DummyInteractionFct`);
 
+      // eslint-disable-next-line no-underscore-dangle
       expect(classAttribute._remoteObject.description).toMatch(/#DummyInteractionFct/);
+      // eslint-disable-next-line no-underscore-dangle
       expect(classAttribute._remoteObject.description).toMatch(/\.additional/);
+      // eslint-disable-next-line no-underscore-dangle
       expect(classAttribute._remoteObject.description).toMatch(/\.DummyInteraction/);
     });
 

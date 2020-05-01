@@ -26,19 +26,18 @@ function unwrapClass(classes) {
 
   const result = [];
   if (Array.isArray(classes)) {
-    classes.forEach(cl => {
+    classes.forEach((cl) => {
       result.push(...unwrapClass(cl));
     });
     return result;
-  } else if (typeof classes === 'object') {
-    Object.keys(classes).forEach(key => {
+  } if (typeof classes === `object`) {
+    Object.keys(classes).forEach((key) => {
       if (classes[key]) result.push(...unwrapClass(classes[key]));
     });
     return result;
-  } else {
-    // string
-    return classes.split(' ');
   }
+  // string
+  return classes.split(` `);
 }
 
 function getMissingClasses(vnodeClasses, elementClasses) {
@@ -61,9 +60,10 @@ export function loadingComponentFactory(resolvableComponent, options) {
         class: getMissingClasses(
           [
             this.$vnode && this.$vnode.data && this.$vnode.data.class,
-            this.$vnode && this.$vnode.data && this.$vnode.data.staticClass
+            this.$vnode && this.$vnode.data && this.$vnode.data.staticClass,
           ],
-          this.$el && this.$el.getAttribute('class'))
+          this.$el && this.$el.getAttribute(`class`),
+        ),
       });
     },
     ...options,

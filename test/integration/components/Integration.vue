@@ -6,7 +6,7 @@
     <LazyHydrate on-interaction>
       <DummyInteraction />
     </LazyHydrate>
-    <DummyInteractionFct id="DummyInteractionFct" class="additional" style="color: red"/>
+    <DummyInteractionFct id="DummyInteractionFct" class="additional" />
     <LazyHydrate ssr-only>
       <DummySsr/>
     </LazyHydrate>
