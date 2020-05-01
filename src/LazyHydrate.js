@@ -154,7 +154,8 @@ export default {
     },
   },
   mounted() {
-    if (this.$el.childElementCount === 0) {
+    // https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeType
+    if (!this.$el || this.$el.nodeType !== 1) {
       // No SSR rendered content, hydrate immediately.
       this.hydrate();
       return;

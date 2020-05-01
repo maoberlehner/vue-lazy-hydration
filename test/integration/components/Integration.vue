@@ -9,6 +9,9 @@
     <LazyHydrate ssr-only>
       <DummySsr/>
     </LazyHydrate>
+    <LazyHydrate ssr-only>
+      <SingleDummy/>
+    </LazyHydrate>
     <br>
     <br>
     <br>
@@ -92,6 +95,7 @@ import DummyIdle from './DummyIdle.vue';
 import DummyInteraction from './DummyInteraction.vue';
 import DummySsr from './DummySsr.vue';
 import DummyVisible from './DummyVisible.vue';
+import SingleDummy from './SingleDummy.vue';
 
 import LazyHydrate from '../../../src/LazyHydrate';
 
@@ -102,6 +106,7 @@ export default {
     DummyInteraction,
     DummySsr,
     DummyVisible,
+    SingleDummy,
     LazyHydrate,
   },
 };
