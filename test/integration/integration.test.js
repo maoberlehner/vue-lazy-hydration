@@ -66,4 +66,29 @@ describe(`integration`, () => {
       expect(moreText).toBe(null);
     });
   });
+
+  describe(`LazyHydrate via import wrappers`, () => {
+    test(`It should apply valid classes while not hydrated.`, async () => {
+      await open(`/integration.html`);
+
+      let classAttribute = await page.$('#DummyInteractionFct');
+
+      expect(classAttribute._remoteObject.description).toBe('div#DummyInteractionFct.additional.DummyInteraction');
+    });
+
+    test(`It should hydrate the component when an interaction happens.`, async () => {
+      await open(`/integration.html`);
+
+      let moreText = await page.$(`#DummyInteractionFct .more`);
+      expect(moreText).toBe(null);
+
+      let button = await find(`#DummyInteractionFct button`);
+      await button.click();
+      button = await find(`#DummyInteractionFct button`);
+      await button.click();
+
+      moreText = await find(`#DummyInteractionFct .more`);
+      expect(moreText).not.toBe(null);
+    });
+  });
 });
