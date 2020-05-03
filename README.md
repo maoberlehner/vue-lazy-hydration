@@ -93,6 +93,7 @@ export default {
 ### Prevent JavaScript bundle loading
 
 > **Attention:** If your setup depends on the [Vue.js template-renderer](https://github.com/vuejs/vue/tree/dev/src/server/template-renderer) for server side rendering (which is the case for Nuxt.js and Gridsome), this technique currently doesn't work and JavaScript bundles are immediately loaded. See [vuejs/vue#9847](https://github.com/vuejs/vue/issues/9847) for the progress on this.
+> There is workaround available see [Workaround for Vue Template Renderer](#lazy-import)
 
 ```html
 <template>
@@ -137,6 +138,62 @@ export default {
     LazyHydrate,
     // The `CommentForm` is only imported if `hydrated` is true.
     CommentForm: () => import('./CommentForm.vue'),
+  },
+  // ...
+};
+</script>
+```
+
+<a name="lazy-import"></a>                                                  
+### Workaround for Vue Template Renderer - Prevent JavaScript bundle loading 
+
+This workaround helps to prevent vue-template renderer from bundling the components within the page. 
+Remove the "component" include within script and add a :import="() => import(..)" statement
+as parameter to LazyHydrate.
+```html
+<template>
+  <div class="ArticlePage">
+    <LazyHydrate on-interaction :import="() => import('./CommentForm.vue')">
+      <CommentForm
+        slot-scope="{ hydrated }"
+        v-if="hydrated"
+        :article-id="article.id"
+      />
+    </LazyHydrate>
+    <!-- Or using new Vue.js 2.6.x v-slot syntax -->
+    <LazyHydrate
+:import="() => import('./CommentForm.vue')"
+      v-slot="{ hydrated }"
+      on-interaction
+    >
+      <CommentForm
+        v-if="hydrated"
+        :article-id="article.id"
+      />
+    </LazyHydrate>
+    <!-- A wrapper is needed when using with `when-visible` -->
+    <LazyHydrate
+:import="() => import('./CommentForm.vue')"
+      v-slot="{ hydrated }"
+      when-visible
+    >
+      <div>
+        <CommentForm
+          v-if="hydrated"
+          :article-id="article.id"
+        />
+      </div>
+    </LazyHydrate>
+  </div>
+</template>
+
+<script>
+import LazyHydrate from 'vue-lazy-hydration';
+
+export default {
+  components: {
+    LazyHydrate,
+    // The `CommentForm` is not imported here.
   },
   // ...
 };

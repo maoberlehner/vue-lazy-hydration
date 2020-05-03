@@ -129,9 +129,15 @@ export default {
     whenVisible: {
       type: [Boolean, Object],
     },
+    import: {
+      type: Function,
+      required: false,
+      default: undefined,
+    },
   },
   data() {
     return {
+      asyncComponent: undefined,
       hydrated: isServer,
     };
   },
@@ -161,6 +167,8 @@ export default {
     }
 
     if (this.ssrOnly) return;
+
+    console.log(`this.interactionEvents`, this.interactionEvents);
 
     this.interactionEvents.forEach((eventName) => {
       this.$el.addEventListener(eventName, this.hydrate, {
@@ -231,13 +239,50 @@ export default {
     },
   },
   render(h) {
-    if (!this.$scopedSlots.default && !this.$slots.default) return null;
+    if (!this.$scopedSlots.default && !this.$slots.default && !this.import) return null;
 
-    const child = this.$scopedSlots.default
-      ? this.$scopedSlots.default({ hydrated: this.hydrated })
-      : this.$slots.default[0];
+    console.log(`async variation`, this.import);
 
-    if (this.hydrated) return child;
+    if (this.hydrated) {
+      console.log(`hydrated!`);
+      if (this.import) {
+        if (!this.asyncComponent) {
+          this.asyncComponent = () => this.import().then((c) => {
+            const component = c.default || c;
+            console.log(`async component loaded`, component);
+            return {
+              render: (createElement) => {
+                const [vnode] = this.$scopedSlots.default
+                  ? this.$scopedSlots.default({ hydrated: this.hydrated })
+                  : this.$slots.default[0];
+                console.log(`RENDER`, vnode);
+                return createElement(component, vnode.data); /*{
+                  class: vnode.data && [vnode.data.class,
+                    vnode.data.staticClass],
+                  directives: vnode.data.directives,
+                  // style: [this.$vnode.data?.style, this.$vnode.data?.staticStyle],
+                  key: vnode.key,
+                  on: vnode.on,
+                });*/
+              },
+            }; /* {
+
+              render: createElement => {
+                console.log('RENDER');
+                createElement(component, {
+                  domProps: {width: this.width, height: this.height},
+                })
+              },
+            }; */
+          });
+        }
+
+        return h(this.asyncComponent);
+      }
+      return this.$scopedSlots.default
+        ? this.$scopedSlots.default({ hydrated: this.hydrated })
+        : this.$slots.default[0];
+    }
 
     const tag = this.$el ? this.$el.tagName : `div`;
     const vnode = h(tag);
@@ -245,6 +290,8 @@ export default {
     // https://github.com/znck
     vnode.asyncFactory = {};
     vnode.isComment = true;
+
+    console.log(`not hydrated...`, this.$el);
 
     return vnode;
   },
