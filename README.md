@@ -162,7 +162,7 @@ as parameter to LazyHydrate.
     </LazyHydrate>
     <!-- Or using new Vue.js 2.6.x v-slot syntax -->
     <LazyHydrate
-:import="() => import('./CommentForm.vue')"
+      :import="() => import('./CommentForm.vue')"
       v-slot="{ hydrated }"
       on-interaction
     >
@@ -173,7 +173,7 @@ as parameter to LazyHydrate.
     </LazyHydrate>
     <!-- A wrapper is needed when using with `when-visible` -->
     <LazyHydrate
-:import="() => import('./CommentForm.vue')"
+      :import="() => import('./CommentForm.vue')"
       v-slot="{ hydrated }"
       when-visible
     >

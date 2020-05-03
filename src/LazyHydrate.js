@@ -168,8 +168,6 @@ export default {
 
     if (this.ssrOnly) return;
 
-    console.log(`this.interactionEvents`, this.interactionEvents);
-
     this.interactionEvents.forEach((eventName) => {
       this.$el.addEventListener(eventName, this.hydrate, {
         capture: true,
@@ -239,46 +237,25 @@ export default {
     },
   },
   render(h) {
-    if (!this.$scopedSlots.default && !this.$slots.default && !this.import) return null;
-
-    console.log(`async variation`, this.import);
+    if (!this.$scopedSlots.default && !this.$slots.default) return null;
 
     if (this.hydrated) {
-      console.log(`hydrated!`);
       if (this.import) {
         if (!this.asyncComponent) {
           this.asyncComponent = () => this.import().then((c) => {
             const component = c.default || c;
-            console.log(`async component loaded`, component);
             return {
-              render: (createElement) => {
-                const [vnode] = this.$scopedSlots.default
-                  ? this.$scopedSlots.default({ hydrated: this.hydrated })
-                  : this.$slots.default[0];
-                console.log(`RENDER`, vnode);
-                return createElement(component, vnode.data); /*{
-                  class: vnode.data && [vnode.data.class,
-                    vnode.data.staticClass],
-                  directives: vnode.data.directives,
-                  // style: [this.$vnode.data?.style, this.$vnode.data?.staticStyle],
-                  key: vnode.key,
-                  on: vnode.on,
-                });*/
-              },
-            }; /* {
-
-              render: createElement => {
-                console.log('RENDER');
-                createElement(component, {
-                  domProps: {width: this.width, height: this.height},
-                })
-              },
-            }; */
+              render: createElement => createElement(component),
+            };
           });
         }
+        const [vnode] = this.$scopedSlots.default
+          ? this.$scopedSlots.default({ hydrated: this.hydrated })
+          : this.$slots.default[0];
 
-        return h(this.asyncComponent);
+        return h(this.asyncComponent, vnode.data);
       }
+
       return this.$scopedSlots.default
         ? this.$scopedSlots.default({ hydrated: this.hydrated })
         : this.$slots.default[0];
@@ -290,8 +267,6 @@ export default {
     // https://github.com/znck
     vnode.asyncFactory = {};
     vnode.isComment = true;
-
-    console.log(`not hydrated...`, this.$el);
 
     return vnode;
   },

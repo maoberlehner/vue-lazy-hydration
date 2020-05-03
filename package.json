@@ -30,6 +30,13 @@
     "test:integration:build": "npm run build && npm run test:integration:compile && npm run test:integration:render",
     "test:integration:serve": "serve test/integration/dist",
     "test:integration": "concurrently 'npm:test:integration:serve' 'jest test/integration/integration.test.js' --kill-others",
+    "test:lazy-integration:compile:server": "SERVER=true npx vue-cli-service build --target lib --no-clean --dest test/lazy-integration/dist/server --name 'entry-integration' test/lazy-integration/entry-integration.js",
+    "test:lazy-integration:compile:client": "npx vue-cli-service build --target lib --no-clean --dest test/lazy-integration/dist/client --name 'entry-integration' test/lazy-integration/entry-integration.js",
+    "test:lazy-integration:compile": "npm run test:lazy-integration:compile:server && npm run test:lazy-integration:compile:client",
+    "test:lazy-integration:render": "node test/lazy-integration/render.js",
+    "test:lazy-integration:build": "npm run build && npm run test:lazy-integration:compile && npm run test:lazy-integration:render",
+    "test:lazy-integration:serve": "serve test/lazy-integration/dist/client",
+    "test:lazy-integration": "concurrently 'npm:test:lazy-integration:serve' 'jest test/lazy-integration/integration.test.js' --kill-others",
     "prepublishOnly": "yarn run lint && yarn run build"
   },
   "devDependencies": {
