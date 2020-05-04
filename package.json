@@ -68,10 +68,7 @@
     "vue-template-compiler": "^2.6.11",
     "nuxt": "^2.0.0",
     "@nuxt/typescript-build": "^0.6.0",
-    "@nuxt/babel-preset-app-edge": "^2.13.0-26475855.c2c7081d",
-    "core-js": "^3.6.5",
-    "sass": "^1.26.5",
-    "fibers": "^5.0.0"
+    "core-js": "^2.6.11"
   },
   "main": "dist/LazyHydrate.js",
   "module": "dist/LazyHydrate.esm.js",
