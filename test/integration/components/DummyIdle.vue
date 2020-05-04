@@ -1,5 +1,5 @@
 <template>
-  <div class="DummyIdle">
+  <div class="DummyIdle inner">
     Mount me for more!
     <br>
     <div

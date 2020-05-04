@@ -4,9 +4,10 @@ module.exports = {
       `@babel/preset-env`,
       {
         modules: false,
-      },
+        },
     ],
   ],
+  plugins: ["@babel/plugin-syntax-dynamic-import"],
   env: {
     test: {
       presets: [

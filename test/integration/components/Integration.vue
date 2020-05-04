@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <LazyHydrate when-idle>
-      <DummyIdle/>
+      <DummyIdle class="outer"/>
     </LazyHydrate>
     <LazyHydrate on-interaction>
       <DummyInteraction/>
@@ -106,3 +106,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.outer {
+  background-color: green;
+}
+</style>
