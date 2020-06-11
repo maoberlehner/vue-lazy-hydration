@@ -154,7 +154,7 @@ export default {
     },
   },
   mounted() {
-    if (this.$el.childElementCount === 0) {
+    if (this.$el.childElementCount === 0 || this.$el.nodeType !== 1 ) {
       // No SSR rendered content, hydrate immediately.
       this.hydrate();
       return;
