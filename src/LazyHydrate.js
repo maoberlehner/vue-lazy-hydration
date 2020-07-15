@@ -94,7 +94,7 @@ export function hydrateOnInteraction(component, { event = `focus`, ignoredProps 
           capture: true,
           once: true,
         }
-      const passiveListenerEvents = ['touchstart', 'touchmove']
+      const passiveListenerEvents = ['touchstart', 'touchmove', 'scroll', 'wheel', 'touchend']
       events.forEach((eventName) => {
         // eslint-disable-next-line no-underscore-dangle
         if(passiveListenerEvents.includes(eventName)) eventOptions.passive = true
