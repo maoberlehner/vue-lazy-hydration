@@ -90,12 +90,15 @@ export function hydrateOnInteraction(component, { event = `focus`, ignoredProps 
   const loading = loadingComponentFactory(resolvableComponent, {
     props: ignoredProps,
     mounted() {
-      events.forEach((eventName) => {
-        // eslint-disable-next-line no-underscore-dangle
-        this.$el.addEventListener(eventName, resolvableComponent._resolve, {
+      const eventOptions = {
           capture: true,
           once: true,
-        });
+        }
+      const passiveListenerEvents = ['touchstart', 'touchmove']
+      events.forEach((eventName) => {
+        // eslint-disable-next-line no-underscore-dangle
+        if(passiveListenerEvents.includes(eventName)) eventOptions.passive = true
+        this.$el.addEventListener(eventName, resolvableComponent._resolve, eventOptions);
       });
     },
   });
