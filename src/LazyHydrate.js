@@ -95,7 +95,7 @@ export function hydrateOnInteraction(component, { event = `focus`, ignoredProps 
         this.$el.addEventListener(eventName, resolvableComponent._resolve, {
           capture: true,
           once: true,
-          passive: true
+          passive: true,
         });
       });
     },
