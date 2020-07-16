@@ -167,6 +167,7 @@ export default {
       this.$el.addEventListener(eventName, this.hydrate, {
         capture: true,
         once: true,
+        passive: true,
       });
     });
     if (this.interactionEvents.length) {
