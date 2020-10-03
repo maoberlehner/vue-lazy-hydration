@@ -279,6 +279,33 @@ export default {
 
 **This plugin will not work as advertised if you're not using it in combination with SSR.** Although it should work with every pre-rendering approach (like [Prerender SPA Plugin](https://github.com/chrisvfritz/prerender-spa-plugin), [Gridsome](https://gridsome.org/), ...) I've only tested it with [Nuxt.js](https://nuxtjs.org) so far.
 
+**Classes and attributes should not be used directly on the `LazyHydrate` component.**  Because `LazyHydrate` is a renderless component, it effectively disappears upon hydration and any classes or attributes on the `LazyHydrate` component will be lost.  Instead, classes and attributes should be placed on slot contents or container elements.
+
+```
+<!-- Incorrect - classes and attributes will be lost -->
+<LazyHydrate id="lazy-id" class="lazy-class" whenVisible>
+  <div>
+     ...
+  </div>
+</LazyHydrate>
+
+<!-- Correct - classes and attributes on slot content -->
+<LazyHydrate whenVisible>
+  <div id="lazy-id" class="lazy-class">
+     ...
+  </div>
+</LazyHydrate>
+
+<!-- Correct - classes and attributes on container element -->
+<div id="lazy-id" class="lazy-class">
+  <LazyHydrate whenVisible>
+    <div>
+       ...
+    </div>
+  </LazyHydrate>
+</div>
+```
+
 ## Articles
 
 - [abomination: a Concept for a Static HTML / Dynamic JavaScript Hybrid Application](https://markus.oberlehner.net/blog/abomination-a-concept-for-a-static-html-dynamic-javascript-hybrid-application/)
