@@ -66,4 +66,16 @@ describe(`integration`, () => {
       expect(moreText).toBe(null);
     });
   });
+
+  describe(`hydration of single root items`, () => {
+    test(`It should not hydrate the component.`, async () => {
+      await open(`/integration.html`);
+
+      const component = await find(`.SingleDummy`);
+      expect(component).not.toBe(null);
+
+      const moreText = await page.$(`.SingleDummy .more`);
+      expect(moreText).toBe(null);
+    });
+  });
 });

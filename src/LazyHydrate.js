@@ -155,7 +155,10 @@ export default {
     },
   },
   mounted() {
-    if (this.$el.childElementCount === 0) {
+    // https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeType
+
+    const needsHydration = this.$el && ((this.$el.dataset && this.$el.dataset[`trigger-hydration`]) || (this.$el.getAttribute && this.$el.getAttribute(`data-trigger-hydration`)));
+    if (!this.$el || this.$el.nodeType !== 1 || needsHydration) {
       // No SSR rendered content, hydrate immediately.
       this.hydrate();
       return;
@@ -241,8 +244,12 @@ export default {
 
     if (this.hydrated) return child;
 
-    const tag = this.$el ? this.$el.tagName : `div`;
-    const vnode = h(tag);
+    let vnode;
+    if (this.$el) {
+      vnode = h(this.$el.tagName);
+    } else {
+      vnode = h(`div`, { attrs: { 'data-trigger-hydration': true } });
+    }
     // Special thanks to Rahul Kadyan for the following lines of code.
     // https://github.com/znck
     vnode.asyncFactory = {};
