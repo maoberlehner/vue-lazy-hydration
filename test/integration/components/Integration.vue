@@ -4,8 +4,9 @@
       <DummyIdle/>
     </LazyHydrate>
     <LazyHydrate on-interaction>
-      <DummyInteraction/>
+      <DummyInteraction />
     </LazyHydrate>
+    <DummyInteractionFct id="DummyInteractionFct" class="additional" />
     <LazyHydrate ssr-only>
       <DummySsr/>
     </LazyHydrate>
@@ -92,8 +93,9 @@ import DummyIdle from './DummyIdle.vue';
 import DummyInteraction from './DummyInteraction.vue';
 import DummySsr from './DummySsr.vue';
 import DummyVisible from './DummyVisible.vue';
+import DummyInteractionFct from './DummyInteractionFct.vue';
 
-import LazyHydrate from '../../../src/LazyHydrate';
+import LazyHydrate, {hydrateOnInteraction} from '../../../src/LazyHydrate';
 
 export default {
   name: `Integration`,
@@ -103,6 +105,7 @@ export default {
     DummySsr,
     DummyVisible,
     LazyHydrate,
+    DummyInteractionFct: hydrateOnInteraction(async () => DummyInteractionFct)
   },
 };
 </script>

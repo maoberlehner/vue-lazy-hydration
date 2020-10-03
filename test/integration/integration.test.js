@@ -66,4 +66,34 @@ describe(`integration`, () => {
       expect(moreText).toBe(null);
     });
   });
+
+  describe(`LazyHydrate via import wrappers`, () => {
+    test(`It should apply valid classes while not hydrated.`, async () => {
+      await open(`/integration.html`);
+
+      const classAttribute = await page.$(`#DummyInteractionFct`);
+
+      // eslint-disable-next-line no-underscore-dangle
+      expect(classAttribute._remoteObject.description).toMatch(/#DummyInteractionFct/);
+      // eslint-disable-next-line no-underscore-dangle
+      expect(classAttribute._remoteObject.description).toMatch(/\.additional/);
+      // eslint-disable-next-line no-underscore-dangle
+      expect(classAttribute._remoteObject.description).toMatch(/\.DummyInteraction/);
+    });
+
+    test(`It should hydrate the component when an interaction happens.`, async () => {
+      await open(`/integration.html`);
+
+      let moreText = await page.$(`#DummyInteractionFct .more`);
+      expect(moreText).toBe(null);
+
+      let button = await find(`#DummyInteractionFct button`);
+      await button.click();
+      button = await find(`#DummyInteractionFct button`);
+      await button.click();
+
+      moreText = await find(`#DummyInteractionFct .more`);
+      expect(moreText).not.toBe(null);
+    });
+  });
 });

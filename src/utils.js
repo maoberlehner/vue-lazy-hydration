@@ -21,6 +21,33 @@ export function createObserver(options) {
   return observer;
 }
 
+function unwrapClass(classes) {
+  if (!classes) return [];
+
+  const result = [];
+  if (Array.isArray(classes)) {
+    classes.forEach((cl) => {
+      result.push(...unwrapClass(cl));
+    });
+    return result;
+  } if (typeof classes === `object`) {
+    Object.keys(classes).forEach((key) => {
+      if (classes[key]) result.push(...unwrapClass(classes[key]));
+    });
+    return result;
+  }
+  // string
+  return classes.split(` `);
+}
+
+function getMissingClasses(vnodeClasses, elementClasses) {
+  const vnodes = unwrapClass(vnodeClasses);
+  const elements = unwrapClass(elementClasses);
+
+  // return all classes which are not in the vnode, but in the elements
+  return elements.filter(x => !vnodes.includes(x));
+}
+
 export function loadingComponentFactory(resolvableComponent, options) {
   return {
     render(h) {
@@ -29,7 +56,15 @@ export function loadingComponentFactory(resolvableComponent, options) {
       // eslint-disable-next-line no-underscore-dangle
       if (!this.$el) resolvableComponent._resolve();
 
-      return h(tag);
+      return h(tag, {
+        class: getMissingClasses(
+          [
+            this.$vnode && this.$vnode.data && this.$vnode.data.class,
+            this.$vnode && this.$vnode.data && this.$vnode.data.staticClass,
+          ],
+          this.$el && this.$el.getAttribute(`class`),
+        ),
+      });
     },
     ...options,
   };
