@@ -24,12 +24,24 @@ export function createObserver(options) {
 export function loadingComponentFactory(resolvableComponent, options) {
   return {
     render(h) {
-      const tag = this.$el ? this.$el.tagName : `div`;
-
       // eslint-disable-next-line no-underscore-dangle
       if (!this.$el) resolvableComponent._resolve();
 
-      return h(tag);
+      const { attributes } = this.$parent.$el;
+      const formattedAttributes = Object.keys(attributes)
+        .reduce(
+          (acc, index) => ({ ...acc, [attributes[index].name]: attributes[index].nodeValue }), {},
+        );
+      const vnode = h(
+        this.$parent.$el.tagName,
+        {
+          attrs: formattedAttributes,
+          domProps: {
+            innerHTML: this.$parent.$el.innerHTML,
+          },
+        },
+      );
+      return vnode;
     },
     ...options,
   };
