@@ -55,7 +55,7 @@ describe(`integration`, () => {
     });
   });
 
-  describe(`<LazyHydrate ssr-only>`, () => {
+  describe(`<LazyHydrate never>`, () => {
     test(`It should not hydrate the component.`, async () => {
       await open(`/integration.html`);
 

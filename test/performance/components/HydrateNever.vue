@@ -5,7 +5,7 @@
     >
       <LazyHydrate
         :key="`${n}-1`"
-        ssr-only
+        never
       >
         <Markdown/>
       </LazyHydrate>
@@ -16,7 +16,7 @@
     >
       <LazyHydrate
         :key="`${n}-2`"
-        ssr-only
+        never
       >
         <DeeplyNested/>
       </LazyHydrate>
@@ -27,7 +27,7 @@
     >
       <LazyHydrate
         :key="`${n}-3`"
-        ssr-only
+        never
       >
         <LongList/>
       </LazyHydrate>
@@ -43,7 +43,7 @@ import LongList from './LongList.vue';
 import Markdown from './Markdown.vue';
 
 export default {
-  name: `SsrOnly`,
+  name: `HydrateNever`,
   components: {
     DeeplyNested,
     LazyHydrate,

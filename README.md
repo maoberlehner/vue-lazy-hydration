@@ -44,7 +44,7 @@ In the example below you can see the four hydration modes in action.
       <ImageSlider/>
     </LazyHydrate>
 
-    <LazyHydrate ssr-only>
+    <LazyHydrate never>
       <ArticleContent :content="article.content"/>
     </LazyHydrate>
 
@@ -84,64 +84,11 @@ export default {
 ```
 
 1. Because it is at the very top of the page, the `ImageSlider` should be hydrated eventually, but we can wait until the browser is idle.
-2. The `ArticleContent` component is only loaded in SSR mode, which means it never gets hydrated in the browser, which also means it will never be interactive (static content only).
+2. The `ArticleContent` component is never hydrated on the client, which also means it will never be interactive (static content only).
 3. Next we can see the `AdSlider` beneath the article content, this component will most likely not be visible initially so we can delay hydration until the point it becomes visible.
 4. At the very bottom of the page we want to render a `CommentForm` but because most people only read the article and don't leave a comment, we can save resources by only hydrating the component whenever it actually receives focus.
 
 ## Advanced
-
-### Prevent JavaScript bundle loading
-
-> **Attention:** If your setup depends on the [Vue.js template-renderer](https://github.com/vuejs/vue/tree/dev/src/server/template-renderer) for server side rendering (which is the case for Nuxt.js and Gridsome), this technique currently doesn't work and JavaScript bundles are immediately loaded. See [vuejs/vue#9847](https://github.com/vuejs/vue/issues/9847) for the progress on this.
-
-```html
-<template>
-  <div class="ArticlePage">
-    <LazyHydrate on-interaction>
-      <CommentForm
-        slot-scope="{ hydrated }"
-        v-if="hydrated"
-        :article-id="article.id"
-      />
-    </LazyHydrate>
-    <!-- Or using new Vue.js 2.6.x v-slot syntax -->
-    <LazyHydrate
-      v-slot="{ hydrated }"
-      on-interaction
-    >
-      <CommentForm
-        v-if="hydrated"
-        :article-id="article.id"
-      />
-    </LazyHydrate>
-    <!-- A wrapper is needed when using with `when-visible` -->
-    <LazyHydrate
-      v-slot="{ hydrated }"
-      when-visible
-    >
-      <div>
-        <CommentForm
-          v-if="hydrated"
-          :article-id="article.id"
-        />
-      </div>
-    </LazyHydrate>
-  </div>
-</template>
-
-<script>
-import LazyHydrate from 'vue-lazy-hydration';
-
-export default {
-  components: {
-    LazyHydrate,
-    // The `CommentForm` is only imported if `hydrated` is true.
-    CommentForm: () => import('./CommentForm.vue'),
-  },
-  // ...
-};
-</script>
-```
 
 ### Manually trigger hydration
 
@@ -153,7 +100,7 @@ Sometimes you might want to prevent a component from loading initially but you w
     <button @click="editModeActive = true">
       Activate edit mode
     </button>
-    <LazyHydrate ssr-only :trigger-hydration="editModeActive">
+    <LazyHydrate never :trigger-hydration="editModeActive">
       <UserSettingsForm/>
     </LazyHydrate>
   </div>
@@ -184,7 +131,7 @@ Because of how this package works, it is not possible to nest multiple root node
 ```html
 <template>
   <div class="MyComponent">
-    <LazyHydrate ssr-only>
+    <LazyHydrate never>
       <div>
         <ArticleHeader/>
         <ArticleContent/>
@@ -214,8 +161,6 @@ For a list of possible options please [take a look at the Intersection Observer 
 
 ## Import Wrappers
 
-> **Attention:** because of [a bug in Vue.js <= v2.6.7](https://github.com/vuejs/vue/pull/9572) Import Wrappers require that you have at least version **v2.6.8** of Vue.js installed otherwise they will not work correctly in certain situations (especially in combination with Vue Router).
-
 Additionally to the `<LazyHydrate>` wrapper component you can also use Import Wrappers to lazy load and hydrate certain components.
 
 ```html
@@ -231,7 +176,7 @@ Additionally to the `<LazyHydrate>` wrapper component you can also use Import Wr
 <script>
 import {
   hydrateOnInteraction,
-  hydrateSsrOnly,
+  hydrateNever,
   hydrateWhenIdle,
   hydrateWhenVisible,
 } from 'vue-lazy-hydration';
@@ -243,7 +188,7 @@ export default {
       // Optional.
       { observerOptions: { rootMargin: '100px' } },
     ),
-    ArticleContent: hydrateSsrOnly(
+    ArticleContent: hydrateNever(
       () => import('./ArticleContent.vue'),
       { ignoredProps: ['content'] },
     ),

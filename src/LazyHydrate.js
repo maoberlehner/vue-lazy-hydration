@@ -68,7 +68,7 @@ export function hydrateWhenVisible(component, { ignoredProps, observerOptions } 
   });
 }
 
-export function hydrateSsrOnly(component) {
+export function hydrateNever(component) {
   if (isServer) return component;
 
   const resolvableComponent = resolvableComponentFactory(component);
@@ -108,6 +108,13 @@ export function hydrateOnInteraction(component, { event = `focus`, ignoredProps 
   });
 }
 
+const Nonce = () => new Promise(() => {});
+
+const LazyHydrateBlocker = {
+  functional: true,
+  render: (h, context) => (context.props.isHydrated ? context.props.content : h(Nonce)),
+};
+
 export default {
   props: {
     idleTimeout: {
@@ -117,7 +124,7 @@ export default {
     onInteraction: {
       type: [Array, Boolean, String],
     },
-    ssrOnly: {
+    never: {
       type: Boolean,
     },
     triggerHydration: {
@@ -133,7 +140,7 @@ export default {
   },
   data() {
     return {
-      hydrated: isServer,
+      isHydrated: isServer,
     };
   },
   watch: {
@@ -161,7 +168,7 @@ export default {
       return;
     }
 
-    if (this.ssrOnly) return;
+    if (this.never) return;
 
     this.interactionEvents.forEach((eventName) => {
       this.$el.addEventListener(eventName, this.hydrate, {
@@ -228,26 +235,16 @@ export default {
       });
     },
     hydrate() {
-      this.hydrated = true;
+      this.isHydrated = true;
       this.cleanup();
     },
   },
   render(h) {
-    if (!this.$scopedSlots.default && !this.$slots.default) return null;
-
-    const child = this.$scopedSlots.default
-      ? this.$scopedSlots.default({ hydrated: this.hydrated })
-      : this.$slots.default[0];
-
-    if (this.hydrated) return child;
-
-    const tag = this.$el ? this.$el.tagName : `div`;
-    const vnode = h(tag);
-    // Special thanks to Rahul Kadyan for the following lines of code.
-    // https://github.com/znck
-    vnode.asyncFactory = {};
-    vnode.isComment = true;
-
-    return vnode;
+    return h(LazyHydrateBlocker, {
+      props: {
+        content: this.$slots.default,
+        isHydrated: this.isHydrated,
+      },
+    });
   },
 };
