@@ -20,7 +20,7 @@
     "lint:scripts": "eslint --ignore-path .gitignore .",
     "lint:scripts-md": "eslint --config .eslintrc-md.json --ext md --ignore-path .gitignore .",
     "lint": "yarn run lint:scripts && yarn run lint:scripts-md",
-    "test:perf:compile": "npx vue-cli-service build --target lib --no-clean --dest test/performance/dist --name 'entry-reference' test/performance/entry-reference.js && npx vue-cli-service build --target lib --no-clean --dest test/performance/dist --name 'entry-ssr-only' test/performance/entry-ssr-only.js",
+    "test:perf:compile": "npx vue-cli-service build --target lib --no-clean --dest test/performance/dist --name 'entry-reference' test/performance/entry-reference.js && npx vue-cli-service build --target lib --no-clean --dest test/performance/dist --name 'entry-hydrate-never' test/performance/entry-hydrate-never.js",
     "test:perf:render": "node test/performance/render.js",
     "test:perf:build": "npm run build && npm run test:perf:compile && npm run test:perf:render",
     "test:perf:serve": "serve test/performance/dist",

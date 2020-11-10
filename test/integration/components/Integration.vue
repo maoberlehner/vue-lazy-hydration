@@ -6,7 +6,7 @@
     <LazyHydrate on-interaction>
       <DummyInteraction/>
     </LazyHydrate>
-    <LazyHydrate ssr-only>
+    <LazyHydrate never>
       <DummySsr/>
     </LazyHydrate>
     <br>

@@ -44,7 +44,7 @@ In the example below you can see the four hydration modes in action.
       <ImageSlider/>
     </LazyHydrate>
 
-    <LazyHydrate ssr-only>
+    <LazyHydrate never>
       <ArticleContent :content="article.content"/>
     </LazyHydrate>
 
@@ -84,7 +84,7 @@ export default {
 ```
 
 1. Because it is at the very top of the page, the `ImageSlider` should be hydrated eventually, but we can wait until the browser is idle.
-2. The `ArticleContent` component is only loaded in SSR mode, which means it never gets hydrated in the browser, which also means it will never be interactive (static content only).
+2. The `ArticleContent` component is never hydrated on the client, which also means it will never be interactive (static content only).
 3. Next we can see the `AdSlider` beneath the article content, this component will most likely not be visible initially so we can delay hydration until the point it becomes visible.
 4. At the very bottom of the page we want to render a `CommentForm` but because most people only read the article and don't leave a comment, we can save resources by only hydrating the component whenever it actually receives focus.
 
@@ -153,7 +153,7 @@ Sometimes you might want to prevent a component from loading initially but you w
     <button @click="editModeActive = true">
       Activate edit mode
     </button>
-    <LazyHydrate ssr-only :trigger-hydration="editModeActive">
+    <LazyHydrate never :trigger-hydration="editModeActive">
       <UserSettingsForm/>
     </LazyHydrate>
   </div>
@@ -184,7 +184,7 @@ Because of how this package works, it is not possible to nest multiple root node
 ```html
 <template>
   <div class="MyComponent">
-    <LazyHydrate ssr-only>
+    <LazyHydrate never>
       <div>
         <ArticleHeader/>
         <ArticleContent/>
@@ -231,7 +231,7 @@ Additionally to the `<LazyHydrate>` wrapper component you can also use Import Wr
 <script>
 import {
   hydrateOnInteraction,
-  hydrateSsrOnly,
+  hydrateNever,
   hydrateWhenIdle,
   hydrateWhenVisible,
 } from 'vue-lazy-hydration';
@@ -243,7 +243,7 @@ export default {
       // Optional.
       { observerOptions: { rootMargin: '100px' } },
     ),
-    ArticleContent: hydrateSsrOnly(
+    ArticleContent: hydrateNever(
       () => import('./ArticleContent.vue'),
       { ignoredProps: ['content'] },
     ),

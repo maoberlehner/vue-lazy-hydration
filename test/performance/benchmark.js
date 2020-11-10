@@ -29,7 +29,7 @@ async function run() {
   });
 
   const reference = await launchChromeAndRunLighthouse(`http://localhost:5000/reference.html`, {}, config);
-  const ssrOnly = await launchChromeAndRunLighthouse(`http://localhost:5000/ssr-only.html`, {}, config);
+  const hydrateNever = await launchChromeAndRunLighthouse(`http://localhost:5000/hydrate-never.html`, {}, config);
 
   table.push(...[
     {
@@ -41,11 +41,11 @@ async function run() {
       ],
     },
     {
-      'SSR Only': [
-        ssrOnly.audits[`estimated-input-latency`].displayValue,
-        ssrOnly.audits[`first-cpu-idle`].displayValue,
-        ssrOnly.audits.interactive.displayValue,
-        ssrOnly.audits[`bootup-time`].displayValue,
+      'hydrate never': [
+        hydrateNever.audits[`estimated-input-latency`].displayValue,
+        hydrateNever.audits[`first-cpu-idle`].displayValue,
+        hydrateNever.audits.interactive.displayValue,
+        hydrateNever.audits[`bootup-time`].displayValue,
       ],
     },
   ]);

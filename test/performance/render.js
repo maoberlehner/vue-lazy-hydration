@@ -2,7 +2,7 @@ const vueServerRenderer = require(`vue-server-renderer`);
 const fs = require(`fs`);
 
 const entryReference = require(`./dist/entry-reference.common.js`);
-const entrySsrOnly = require(`./dist/entry-ssr-only.common.js`);
+const entryHydrateNever = require(`./dist/entry-hydrate-never.common.js`);
 
 function saveFile(name, contents) {
   fs.writeFile(`${__dirname}/dist/${name}.html`, contents, (error) => {
@@ -23,12 +23,12 @@ referenceRenderer.renderToString(entryReference.App, (error, html) => {
   saveFile(`reference`, html);
 });
 
-const ssrOnlyRenderer = vueServerRenderer.createRenderer({
-  template: fs.readFileSync(`${__dirname}/template-ssr-only.html`, `utf-8`),
+const hydrateNeverRenderer = vueServerRenderer.createRenderer({
+  template: fs.readFileSync(`${__dirname}/template-hydrate-never.html`, `utf-8`),
 });
 
-ssrOnlyRenderer.renderToString(entrySsrOnly.App, (error, html) => {
+hydrateNeverRenderer.renderToString(entryHydrateNever.App, (error, html) => {
   if (error) throw error;
 
-  saveFile(`ssr-only`, html);
+  saveFile(`hydrate-never`, html);
 });

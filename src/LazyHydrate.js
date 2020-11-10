@@ -68,7 +68,7 @@ export function hydrateWhenVisible(component, { ignoredProps, observerOptions } 
   });
 }
 
-export function hydrateSsrOnly(component) {
+export function hydrateNever(component) {
   if (isServer) return component;
 
   const resolvableComponent = resolvableComponentFactory(component);
@@ -117,7 +117,7 @@ export default {
     onInteraction: {
       type: [Array, Boolean, String],
     },
-    ssrOnly: {
+    never: {
       type: Boolean,
     },
     triggerHydration: {
@@ -161,7 +161,7 @@ export default {
       return;
     }
 
-    if (this.ssrOnly) return;
+    if (this.never) return;
 
     this.interactionEvents.forEach((eventName) => {
       this.$el.addEventListener(eventName, this.hydrate, {
