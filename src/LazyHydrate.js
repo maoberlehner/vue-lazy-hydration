@@ -108,6 +108,13 @@ export function hydrateOnInteraction(component, { event = `focus`, ignoredProps 
   });
 }
 
+const Nonce = () => new Promise(() => {});
+
+const LazyHydrateBlocker = {
+  functional: true,
+  render: (h, context) => (context.props.isHydrated ? context.props.content : h(Nonce)),
+};
+
 export default {
   props: {
     idleTimeout: {
@@ -133,7 +140,7 @@ export default {
   },
   data() {
     return {
-      hydrated: isServer,
+      isHydrated: isServer,
     };
   },
   watch: {
@@ -228,24 +235,16 @@ export default {
       });
     },
     hydrate() {
-      this.hydrated = true;
+      this.isHydrated = true;
       this.cleanup();
     },
   },
   render(h) {
-    if (!this.$slots.default) return null;
-
-    const child = this.$slots.default[0];
-
-    if (this.hydrated) return child;
-
-    const tag = this.$el ? this.$el.tagName : `div`;
-    const vnode = h(tag);
-    // Special thanks to Rahul Kadyan for the following lines of code.
-    // https://github.com/znck
-    vnode.asyncFactory = {};
-    vnode.isComment = true;
-
-    return vnode;
+    return h(LazyHydrateBlocker, {
+      props: {
+        content: this.$slots.default,
+        isHydrated: this.isHydrated,
+      },
+    });
   },
 };
