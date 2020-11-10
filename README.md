@@ -161,8 +161,6 @@ For a list of possible options please [take a look at the Intersection Observer 
 
 ## Import Wrappers
 
-> **Attention:** because of [a bug in Vue.js <= v2.6.7](https://github.com/vuejs/vue/pull/9572) Import Wrappers require that you have at least version **v2.6.8** of Vue.js installed otherwise they will not work correctly in certain situations (especially in combination with Vue Router).
-
 Additionally to the `<LazyHydrate>` wrapper component you can also use Import Wrappers to lazy load and hydrate certain components.
 
 ```html
