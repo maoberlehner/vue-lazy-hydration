@@ -90,59 +90,6 @@ export default {
 
 ## Advanced
 
-### Prevent JavaScript bundle loading
-
-> **Attention:** If your setup depends on the [Vue.js template-renderer](https://github.com/vuejs/vue/tree/dev/src/server/template-renderer) for server side rendering (which is the case for Nuxt.js and Gridsome), this technique currently doesn't work and JavaScript bundles are immediately loaded. See [vuejs/vue#9847](https://github.com/vuejs/vue/issues/9847) for the progress on this.
-
-```html
-<template>
-  <div class="ArticlePage">
-    <LazyHydrate on-interaction>
-      <CommentForm
-        slot-scope="{ hydrated }"
-        v-if="hydrated"
-        :article-id="article.id"
-      />
-    </LazyHydrate>
-    <!-- Or using new Vue.js 2.6.x v-slot syntax -->
-    <LazyHydrate
-      v-slot="{ hydrated }"
-      on-interaction
-    >
-      <CommentForm
-        v-if="hydrated"
-        :article-id="article.id"
-      />
-    </LazyHydrate>
-    <!-- A wrapper is needed when using with `when-visible` -->
-    <LazyHydrate
-      v-slot="{ hydrated }"
-      when-visible
-    >
-      <div>
-        <CommentForm
-          v-if="hydrated"
-          :article-id="article.id"
-        />
-      </div>
-    </LazyHydrate>
-  </div>
-</template>
-
-<script>
-import LazyHydrate from 'vue-lazy-hydration';
-
-export default {
-  components: {
-    LazyHydrate,
-    // The `CommentForm` is only imported if `hydrated` is true.
-    CommentForm: () => import('./CommentForm.vue'),
-  },
-  // ...
-};
-</script>
-```
-
 ### Manually trigger hydration
 
 Sometimes you might want to prevent a component from loading initially but you want to activate it on demand if a certain action is triggered. You can do this by manually triggering the component to hydrate like you can see in the following example.
