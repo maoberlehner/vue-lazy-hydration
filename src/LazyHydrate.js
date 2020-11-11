@@ -1,113 +1,119 @@
 import {
   createObserver,
-  loadingComponentFactory,
-  resolvableComponentFactory,
+  makeHydrationPromise,
 } from './utils';
 
 const isServer = typeof window === `undefined`;
 
-export function hydrateWhenIdle(component, { ignoredProps, timeout = 2000 } = {}) {
-  if (isServer) return component;
+function isAsyncComponentFactory(componentOrFactory) {
+  return typeof componentOrFactory === `function`;
+}
 
-  const resolvableComponent = resolvableComponentFactory(component);
-  const loading = loadingComponentFactory(resolvableComponent, {
-    props: ignoredProps,
+function normalizeComponent(componentOrFactory) {
+  if (isAsyncComponentFactory) return componentOrFactory;
+
+  return () => componentOrFactory;
+}
+
+function resolveComponentFactory(componentFactory) {
+  return componentFactory().then(component => component.default || component);
+}
+
+function makeNonce({ componentFactory, hydrate, hydrationPromise }) {
+  return () => new Promise((resolve) => {
+    if (isServer) hydrate();
+
+    hydrationPromise.then(() => resolve(resolveComponentFactory(componentFactory)));
+  });
+}
+
+export function hydrateWhenIdle(componentOrFactory, { timeout = 2000 } = {}) {
+  const { hydrate, hydrationPromise } = makeHydrationPromise();
+  const componentFactory = normalizeComponent(componentOrFactory);
+  const Nonce = makeNonce({ componentFactory, hydrate, hydrationPromise });
+
+  return {
     mounted() {
       // If `requestIdleCallback()` or `requestAnimationFrame()`
       // is not supported, hydrate immediately.
       if (!(`requestIdleCallback` in window) || !(`requestAnimationFrame` in window)) {
         // eslint-disable-next-line no-underscore-dangle
-        resolvableComponent._resolve();
+        hydrate();
         return;
       }
 
       // @ts-ignore
       const id = requestIdleCallback(() => {
         // eslint-disable-next-line no-underscore-dangle
-        requestAnimationFrame(resolvableComponent._resolve);
+        requestAnimationFrame(hydrate);
       }, { timeout });
       // @ts-ignore
       const cleanup = () => cancelIdleCallback(id);
-      resolvableComponent.then(cleanup);
+      hydrationPromise.then(cleanup);
     },
-  });
-
-  return () => ({
-    component: resolvableComponent,
-    delay: 0,
-    loading,
-  });
+    render(h) {
+      return h(Nonce, { props: this.$attrs }, this.$slots.default);
+    },
+  };
 }
 
-export function hydrateWhenVisible(component, { ignoredProps, observerOptions } = {}) {
-  if (isServer) return component;
-
-  const resolvableComponent = resolvableComponentFactory(component);
+export function hydrateWhenVisible(componentOrFactory, { observerOptions = undefined } = {}) {
+  const { hydrate, hydrationPromise } = makeHydrationPromise();
+  const componentFactory = normalizeComponent(componentOrFactory);
+  const Nonce = makeNonce({ componentFactory, hydrate, hydrationPromise });
   const observer = createObserver(observerOptions);
 
-  const loading = loadingComponentFactory(resolvableComponent, {
-    props: ignoredProps,
+  return {
     mounted() {
-      // If Intersection Observer API is not supported, hydrate immediately.
       if (!observer) {
-        // eslint-disable-next-line no-underscore-dangle
-        resolvableComponent._resolve();
+        hydrate();
         return;
       }
 
-      // eslint-disable-next-line no-underscore-dangle
-      this.$el.hydrate = resolvableComponent._resolve;
+      this.$el.hydrate = hydrate;
       const cleanup = () => observer.unobserve(this.$el);
-      resolvableComponent.then(cleanup);
+      hydrationPromise.then(cleanup);
       observer.observe(this.$el);
     },
-  });
-
-  return () => ({
-    component: resolvableComponent,
-    delay: 0,
-    loading,
-  });
+    render(h) {
+      return h(Nonce, { props: this.$attrs }, this.$slots.default);
+    },
+  };
 }
 
-export function hydrateNever(component) {
-  if (isServer) return component;
+export function hydrateNever(componentOrFactory) {
+  const { hydrate, hydrationPromise } = makeHydrationPromise();
+  const componentFactory = normalizeComponent(componentOrFactory);
+  const Nonce = makeNonce({ componentFactory, hydrate, hydrationPromise });
 
-  const resolvableComponent = resolvableComponentFactory(component);
-  const loading = loadingComponentFactory(resolvableComponent);
-
-  return () => ({
-    component: resolvableComponent,
-    delay: 0,
-    loading,
-  });
+  return {
+    render(h) {
+      return h(Nonce, { props: this.$attrs }, this.$slots.default);
+    },
+  };
 }
 
-export function hydrateOnInteraction(component, { event = `focus`, ignoredProps } = {}) {
-  if (isServer) return component;
-
-  const resolvableComponent = resolvableComponentFactory(component);
+export function hydrateOnInteraction(componentOrFactory, { event = `focus` } = {}) {
+  const { hydrate, hydrationPromise } = makeHydrationPromise();
+  const componentFactory = normalizeComponent(componentOrFactory);
+  const Nonce = makeNonce({ componentFactory, hydrate, hydrationPromise });
   const events = Array.isArray(event) ? event : [event];
 
-  const loading = loadingComponentFactory(resolvableComponent, {
-    props: ignoredProps,
+  return {
     mounted() {
       events.forEach((eventName) => {
         // eslint-disable-next-line no-underscore-dangle
-        this.$el.addEventListener(eventName, resolvableComponent._resolve, {
+        this.$el.addEventListener(eventName, hydrate, {
           capture: true,
           once: true,
           passive: true,
         });
       });
     },
-  });
-
-  return () => ({
-    component: resolvableComponent,
-    delay: 0,
-    loading,
-  });
+    render(h) {
+      return h(Nonce, { props: this.$attrs }, this.$slots.default);
+    },
+  };
 }
 
 const Nonce = () => new Promise(() => {});

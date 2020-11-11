@@ -21,29 +21,14 @@ export function createObserver(options) {
   return observer;
 }
 
-export function loadingComponentFactory(resolvableComponent, options) {
-  return {
-    render(h) {
-      const tag = this.$el ? this.$el.tagName : `div`;
-
-      // eslint-disable-next-line no-underscore-dangle
-      if (!this.$el) resolvableComponent._resolve();
-
-      return h(tag);
-    },
-    ...options,
-  };
-}
-
-export function resolvableComponentFactory(component) {
-  let resolve;
-  const promise = new Promise((newResolve) => {
-    resolve = newResolve;
+export function makeHydrationPromise() {
+  let hydrate = () => {};
+  const hydrationPromise = new Promise((resolve) => {
+    hydrate = resolve;
   });
-  // eslint-disable-next-line no-underscore-dangle
-  promise._resolve = () => {
-    resolve(typeof component === `function` ? component() : component);
-  };
 
-  return promise;
+  return {
+    hydrate,
+    hydrationPromise,
+  };
 }
