@@ -21,10 +21,12 @@ export function hydrateWhenIdle(component, { ignoredProps, timeout = 2000 } = {}
         return;
       }
 
+      // @ts-ignore
       const id = requestIdleCallback(() => {
         // eslint-disable-next-line no-underscore-dangle
         requestAnimationFrame(resolvableComponent._resolve);
       }, { timeout });
+      // @ts-ignore
       const cleanup = () => cancelIdleCallback(id);
       resolvableComponent.then(cleanup);
     },
