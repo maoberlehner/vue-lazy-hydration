@@ -6,7 +6,7 @@ import {
 
 const isServer = typeof window === `undefined`;
 
-export function hydrateWhenIdle(component, { ignoredProps } = {}) {
+export function hydrateWhenIdle(component, { ignoredProps, timeout = 2000 } = {}) {
   if (isServer) return component;
 
   const resolvableComponent = resolvableComponentFactory(component);
@@ -24,7 +24,7 @@ export function hydrateWhenIdle(component, { ignoredProps } = {}) {
       const id = requestIdleCallback(() => {
         // eslint-disable-next-line no-underscore-dangle
         requestAnimationFrame(resolvableComponent._resolve);
-      }, { timeout: this.idleTimeout });
+      }, { timeout });
       const cleanup = () => cancelIdleCallback(id);
       resolvableComponent.then(cleanup);
     },
