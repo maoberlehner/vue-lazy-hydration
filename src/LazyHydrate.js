@@ -12,7 +12,7 @@ function isAsyncComponentFactory(componentOrFactory) {
 function normalizeComponent(componentOrFactory) {
   if (isAsyncComponentFactory) return componentOrFactory;
 
-  return () => componentOrFactory;
+  return () => Promise.resolve(componentOrFactory);
 }
 
 function resolveComponentFactory(componentFactory) {
