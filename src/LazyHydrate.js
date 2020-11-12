@@ -27,93 +27,85 @@ function makeNonce({ componentFactory, hydrate, hydrationPromise }) {
   });
 }
 
-export function hydrateWhenIdle(componentOrFactory, { timeout = 2000 } = {}) {
-  const { hydrate, hydrationPromise } = makeHydrationPromise();
+function makeHydrationBlocker(componentOrFactory, options) {
   const componentFactory = normalizeComponent(componentOrFactory);
-  const Nonce = makeNonce({ componentFactory, hydrate, hydrationPromise });
 
   return {
+    ...options,
+    mixins: [{
+      beforeCreate() {
+        const { hydrate, hydrationPromise } = makeHydrationPromise();
+        this.Nonce = makeNonce({ componentFactory, hydrate, hydrationPromise });
+        this.hydrate = hydrate;
+        this.hydrationPromise = hydrationPromise;
+      },
+      render(h) {
+        return h(this.Nonce, { props: this.$attrs }, this.$slots.default);
+      },
+    }],
+  };
+}
+
+export function hydrateWhenIdle(componentOrFactory, { timeout = 2000 } = {}) {
+  return makeHydrationBlocker(componentOrFactory, {
     mounted() {
       // If `requestIdleCallback()` or `requestAnimationFrame()`
       // is not supported, hydrate immediately.
       if (!(`requestIdleCallback` in window) || !(`requestAnimationFrame` in window)) {
         // eslint-disable-next-line no-underscore-dangle
-        hydrate();
+        this.hydrate();
         return;
       }
 
       // @ts-ignore
       const id = requestIdleCallback(() => {
         // eslint-disable-next-line no-underscore-dangle
-        requestAnimationFrame(hydrate);
+        requestAnimationFrame(this.hydrate);
       }, { timeout });
       // @ts-ignore
       const cleanup = () => cancelIdleCallback(id);
-      hydrationPromise.then(cleanup);
+      this.hydrationPromise.then(cleanup);
     },
-    render(h) {
-      return h(Nonce, { props: this.$attrs }, this.$slots.default);
-    },
-  };
+  });
 }
 
 export function hydrateWhenVisible(componentOrFactory, { observerOptions = undefined } = {}) {
-  const { hydrate, hydrationPromise } = makeHydrationPromise();
-  const componentFactory = normalizeComponent(componentOrFactory);
-  const Nonce = makeNonce({ componentFactory, hydrate, hydrationPromise });
   const observer = createObserver(observerOptions);
 
-  return {
+  return makeHydrationBlocker(componentOrFactory, {
     mounted() {
       if (!observer) {
-        hydrate();
+        this.hydrate();
         return;
       }
 
-      this.$el.hydrate = hydrate;
+      this.$el.hydrate = this.hydrate;
       const cleanup = () => observer.unobserve(this.$el);
-      hydrationPromise.then(cleanup);
+      this.hydrationPromise.then(cleanup);
       observer.observe(this.$el);
     },
-    render(h) {
-      return h(Nonce, { props: this.$attrs }, this.$slots.default);
-    },
-  };
+  });
 }
 
 export function hydrateNever(componentOrFactory) {
-  const { hydrate, hydrationPromise } = makeHydrationPromise();
-  const componentFactory = normalizeComponent(componentOrFactory);
-  const Nonce = makeNonce({ componentFactory, hydrate, hydrationPromise });
-
-  return {
-    render(h) {
-      return h(Nonce, { props: this.$attrs }, this.$slots.default);
-    },
-  };
+  return makeHydrationBlocker(componentOrFactory);
 }
 
 export function hydrateOnInteraction(componentOrFactory, { event = `focus` } = {}) {
-  const { hydrate, hydrationPromise } = makeHydrationPromise();
-  const componentFactory = normalizeComponent(componentOrFactory);
-  const Nonce = makeNonce({ componentFactory, hydrate, hydrationPromise });
   const events = Array.isArray(event) ? event : [event];
 
-  return {
+  return makeHydrationBlocker(componentOrFactory, {
     mounted() {
       events.forEach((eventName) => {
         // eslint-disable-next-line no-underscore-dangle
-        this.$el.addEventListener(eventName, hydrate, {
+        this.$el.addEventListener(eventName, this.hydrate, {
           capture: true,
           once: true,
           passive: true,
         });
       });
     },
-    render(h) {
-      return h(Nonce, { props: this.$attrs }, this.$slots.default);
-    },
-  };
+  });
 }
 
 const Nonce = () => new Promise(() => {});

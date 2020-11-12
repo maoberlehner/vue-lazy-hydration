@@ -199,10 +199,6 @@ export default {
 </script>
 ```
 
-### Caveats
-
-1. When using `hydrateWhenVisible` and `hydrateOnInteraction` all instances of a certain component are immediately hydrated as soon as one of the instances becomes visible or is interacted with.
-
 ## Benchmarks
 
 ### Without lazy hydration
