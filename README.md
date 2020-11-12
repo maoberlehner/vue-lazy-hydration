@@ -9,8 +9,6 @@
 
 [![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/O4O7U55Y)
 
-## Motivation
-
 `vue-lazy-hydration` is a renderless Vue.js component to **improve Estimated Input Latency and Time to Interactive** of server-side rendered Vue.js applications. This can be achieved **by using lazy hydration to delay the hydration of pre-rendered HTML**.
 
 ## Install
