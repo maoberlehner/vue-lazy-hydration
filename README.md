@@ -186,14 +186,11 @@ export default {
       // Optional.
       { observerOptions: { rootMargin: '100px' } },
     ),
-    ArticleContent: hydrateNever(
-      () => import('./ArticleContent.vue'),
-      { ignoredProps: ['content'] },
-    ),
+    ArticleContent: hydrateNever(() => import('./ArticleContent.vue')),
     CommentForm: hydrateOnInteraction(
       () => import('./CommentForm.vue'),
       // `focus` is the default event.
-      { event: 'focus', ignoredProps: ['articleId'] },
+      { event: 'focus' },
     ),
     ImageSlider: hydrateWhenIdle(() => import('./ImageSlider.vue')),
   },
@@ -204,9 +201,7 @@ export default {
 
 ### Caveats
 
-1. Properties passed to a wrapped component are rendered as an HTML attribute on the root element.  
-   E.g. `<ArticleContent :content="article.content"/>` would render to `<div class="ArticleContent" content="Lorem ipsum dolor ...">Lorem ipsum dolor ...</div>` as long as you don't provide `content` as an ignored property the way you can see in the example above.
-2. When using `hydrateWhenVisible` and `hydrateOnInteraction` all instances of a certain component are immediately hydrated as soon as one of the instances becomes visible or is interacted with.
+1. When using `hydrateWhenVisible` and `hydrateOnInteraction` all instances of a certain component are immediately hydrated as soon as one of the instances becomes visible or is interacted with.
 
 ## Benchmarks
 
@@ -221,6 +216,28 @@ export default {
 ## Caveats
 
 **This plugin will not work as advertised if you're not using it in combination with SSR.** Although it should work with every pre-rendering approach (like [Prerender SPA Plugin](https://github.com/chrisvfritz/prerender-spa-plugin), [Gridsome](https://gridsome.org/), ...) I've only tested it with [Nuxt.js](https://nuxtjs.org) so far.
+
+## Upgrade v1.x to v2.x
+
+Breaking changes:
+
+- `ssr-only` was renamed to `never` (as in "Hydrate this? Never!").
+
+```diff
+-<LazyHydrate ssr-only>
++<LazyHydrate never>
+   <ArticleContent/>
+ </LazyHydrate>
+```
+
+- Specyfing `ignored-props` on Import Wrappers is not necessary anymore.
+
+```diff
+ components: {
+-  ArticleContent: hydrateNever(() => import('./ArticleContent.vue'), { ignoredProps: ['content'] }),
++  ArticleContent: hydrateNever(() => import('./ArticleContent.vue')),
+ }
+```
 
 ## Articles
 
