@@ -49,6 +49,12 @@ function makeHydrationBlocker(componentOrFactory, options) {
 export function hydrateWhenIdle(componentOrFactory, { timeout = 2000 } = {}) {
   return makeHydrationBlocker(componentOrFactory, {
     mounted() {
+      if (this.$el.nodeType === Node.COMMENT_NODE) {
+        // No SSR rendered content, hydrate immediately.
+        this.hydrate();
+        return;
+      }
+
       // If `requestIdleCallback()` or `requestAnimationFrame()`
       // is not supported, hydrate immediately.
       if (!(`requestIdleCallback` in window) || !(`requestAnimationFrame` in window)) {
@@ -74,6 +80,12 @@ export function hydrateWhenVisible(componentOrFactory, { observerOptions = undef
 
   return makeHydrationBlocker(componentOrFactory, {
     mounted() {
+      if (this.$el.nodeType === Node.COMMENT_NODE) {
+        // No SSR rendered content, hydrate immediately.
+        this.hydrate();
+        return;
+      }
+
       if (!observer) {
         this.hydrate();
         return;
@@ -88,7 +100,14 @@ export function hydrateWhenVisible(componentOrFactory, { observerOptions = undef
 }
 
 export function hydrateNever(componentOrFactory) {
-  return makeHydrationBlocker(componentOrFactory);
+  return makeHydrationBlocker(componentOrFactory, {
+    mounted() {
+      if (this.$el.nodeType === Node.COMMENT_NODE) {
+        // No SSR rendered content, hydrate immediately.
+        this.hydrate();
+      }
+    },
+  });
 }
 
 export function hydrateOnInteraction(componentOrFactory, { event = `focus` } = {}) {
@@ -96,6 +115,12 @@ export function hydrateOnInteraction(componentOrFactory, { event = `focus` } = {
 
   return makeHydrationBlocker(componentOrFactory, {
     mounted() {
+      if (this.$el.nodeType === Node.COMMENT_NODE) {
+        // No SSR rendered content, hydrate immediately.
+        this.hydrate();
+        return;
+      }
+
       events.forEach((eventName) => {
         // eslint-disable-next-line no-underscore-dangle
         this.$el.addEventListener(eventName, this.hydrate, {
