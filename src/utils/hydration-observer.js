@@ -1,6 +1,6 @@
 const observers = new Map();
 
-export function createObserver(options) {
+export function makeHydrationObserver(options) {
   if (typeof IntersectionObserver === `undefined`) return null;
 
   const optionKey = JSON.stringify(options);
@@ -19,16 +19,4 @@ export function createObserver(options) {
   observers.set(optionKey, observer);
 
   return observer;
-}
-
-export function makeHydrationPromise() {
-  let hydrate = () => {};
-  const hydrationPromise = new Promise((resolve) => {
-    hydrate = resolve;
-  });
-
-  return {
-    hydrate,
-    hydrationPromise,
-  };
 }
