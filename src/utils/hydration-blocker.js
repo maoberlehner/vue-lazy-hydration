@@ -45,14 +45,12 @@ export function makeHydrationBlocker(component, options) {
           // If `requestIdleCallback()` or `requestAnimationFrame()`
           // is not supported, hydrate immediately.
           if (!(`requestIdleCallback` in window) || !(`requestAnimationFrame` in window)) {
-            // eslint-disable-next-line no-underscore-dangle
             this.hydrate();
             return;
           }
 
           // @ts-ignore
           const id = requestIdleCallback(() => {
-            // eslint-disable-next-line no-underscore-dangle
             requestAnimationFrame(this.hydrate);
           }, { timeout: this.idleTimeout });
           // @ts-ignore
