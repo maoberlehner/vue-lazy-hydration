@@ -36,6 +36,7 @@ export function makeHydrationBlocker(component, options) {
 
           this.$el.hydrate = this.hydrate;
           const cleanup = () => observer.unobserve(this.$el);
+          this.cleanupHandlers.push(cleanup);
           this.hydrationPromise.then(cleanup);
           observer.observe(this.$el);
           return;
@@ -55,6 +56,7 @@ export function makeHydrationBlocker(component, options) {
           }, { timeout: this.idleTimeout });
           // @ts-ignore
           const cleanup = () => cancelIdleCallback(id);
+          this.cleanupHandlers.push(cleanup);
           this.hydrationPromise.then(cleanup);
         }
 
