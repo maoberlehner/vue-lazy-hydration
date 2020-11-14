@@ -3,8 +3,7 @@ import { makeHydrationPromise } from './hydration-promise';
 import { makeNonce } from './nonce';
 
 export function makeHydrationBlocker(component, options) {
-  return {
-    ...options,
+  return Object.assign({
     mixins: [{
       beforeCreate() {
         this.cleanupHandlers = [];
@@ -36,6 +35,7 @@ export function makeHydrationBlocker(component, options) {
 
           this.$el.hydrate = this.hydrate;
           const cleanup = () => observer.unobserve(this.$el);
+          this.cleanupHandlers.push(cleanup);
           this.hydrationPromise.then(cleanup);
           observer.observe(this.$el);
           return;
@@ -45,18 +45,17 @@ export function makeHydrationBlocker(component, options) {
           // If `requestIdleCallback()` or `requestAnimationFrame()`
           // is not supported, hydrate immediately.
           if (!(`requestIdleCallback` in window) || !(`requestAnimationFrame` in window)) {
-            // eslint-disable-next-line no-underscore-dangle
             this.hydrate();
             return;
           }
 
           // @ts-ignore
           const id = requestIdleCallback(() => {
-            // eslint-disable-next-line no-underscore-dangle
             requestAnimationFrame(this.hydrate);
           }, { timeout: this.idleTimeout });
           // @ts-ignore
           const cleanup = () => cancelIdleCallback(id);
+          this.cleanupHandlers.push(cleanup);
           this.hydrationPromise.then(cleanup);
         }
 
@@ -69,8 +68,9 @@ export function makeHydrationBlocker(component, options) {
 
           this.interactionEvents.forEach((eventName) => {
             const eventListenerParams = [eventName, this.hydrate, eventListenerOptions];
-            this.$el.addEventListener(...eventListenerParams);
-            this.cleanupHandlers.push(() => this.$el.removeEventListener(...eventListenerParams));
+            this.$el.addEventListener.apply(null, eventListenerParams);
+            const cleanup = () => this.$el.removeEventListener.apply(null, eventListenerParams);
+            this.cleanupHandlers.push(cleanup);
           });
         }
       },
@@ -83,5 +83,5 @@ export function makeHydrationBlocker(component, options) {
         return h(this.Nonce, { props: this.$attrs }, this.$slots.default);
       },
     }],
-  };
+  }, options);
 }
