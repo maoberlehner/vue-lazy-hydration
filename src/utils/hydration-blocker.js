@@ -3,8 +3,7 @@ import { makeHydrationPromise } from './hydration-promise';
 import { makeNonce } from './nonce';
 
 export function makeHydrationBlocker(component, options) {
-  return {
-    ...options,
+  return Object.assign({
     mixins: [{
       beforeCreate() {
         this.cleanupHandlers = [];
@@ -69,8 +68,8 @@ export function makeHydrationBlocker(component, options) {
 
           this.interactionEvents.forEach((eventName) => {
             const eventListenerParams = [eventName, this.hydrate, eventListenerOptions];
-            this.$el.addEventListener(...eventListenerParams);
-            const cleanup = () => this.$el.removeEventListener(...eventListenerParams);
+            this.$el.addEventListener.apply(null, eventListenerParams);
+            const cleanup = () => this.$el.removeEventListener.apply(null, eventListenerParams);
             this.cleanupHandlers.push(cleanup);
           });
         }
@@ -84,5 +83,5 @@ export function makeHydrationBlocker(component, options) {
         return h(this.Nonce, { props: this.$attrs }, this.$slots.default);
       },
     }],
-  };
+  }, options);
 }
