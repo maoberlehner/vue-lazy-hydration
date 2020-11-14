@@ -70,7 +70,8 @@ export function makeHydrationBlocker(component, options) {
           this.interactionEvents.forEach((eventName) => {
             const eventListenerParams = [eventName, this.hydrate, eventListenerOptions];
             this.$el.addEventListener(...eventListenerParams);
-            this.cleanupHandlers.push(() => this.$el.removeEventListener(...eventListenerParams));
+            const cleanup = () => this.$el.removeEventListener(...eventListenerParams);
+            this.cleanupHandlers.push(cleanup);
           });
         }
       },
