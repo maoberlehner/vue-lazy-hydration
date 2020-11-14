@@ -242,7 +242,7 @@ Breaking changes:
 
 ## Credits
 
-The code of the current implementation of this package is based on a [similar package created by **Rahul Kadyan**](https://github.com/znck/lazy-hydration). Thanks to his code I'm finally able to build a clean solution for what I dreamed of when I created the [abomination](https://markus.oberlehner.net/blog/abomination-a-concept-for-a-static-html-dynamic-javascript-hybrid-application/).
+The code of the v1 version of this package was based on a [similar package created by **Rahul Kadyan**](https://github.com/znck/lazy-hydration).
 
 ## Testing
 
