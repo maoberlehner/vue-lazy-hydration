@@ -237,12 +237,13 @@ Breaking changes:
 
 ## Articles
 
+- [Partial Hydration Concepts: Lazy and Active](https://markus.oberlehner.net/blog/partial-hydration-concepts-lazy-and-active/)
 - [abomination: a Concept for a Static HTML / Dynamic JavaScript Hybrid Application](https://markus.oberlehner.net/blog/abomination-a-concept-for-a-static-html-dynamic-javascript-hybrid-application/)
 - [How to Drastically Reduce Estimated Input Latency and Time to Interactive of SSR Vue.js Applications](https://markus.oberlehner.net/blog/how-to-drastically-reduce-estimated-input-latency-and-time-to-interactive-of-ssr-vue-applications/)
 
 ## Credits
 
-The code of the current implementation of this package is based on a [similar package created by **Rahul Kadyan**](https://github.com/znck/lazy-hydration). Thanks to his code I'm finally able to build a clean solution for what I dreamed of when I created the [abomination](https://markus.oberlehner.net/blog/abomination-a-concept-for-a-static-html-dynamic-javascript-hybrid-application/).
+The code of the v1 version of this package was based on a [similar package created by **Rahul Kadyan**](https://github.com/znck/lazy-hydration).
 
 ## Testing
 

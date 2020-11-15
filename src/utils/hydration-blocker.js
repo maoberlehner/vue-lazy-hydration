@@ -59,7 +59,7 @@ export function makeHydrationBlocker(component, options) {
           this.hydrationPromise.then(cleanup);
         }
 
-        if (this.interactionEvents.length) {
+        if (this.interactionEvents && this.interactionEvents.length) {
           const eventListenerOptions = {
             capture: true,
             once: true,
@@ -67,9 +67,10 @@ export function makeHydrationBlocker(component, options) {
           };
 
           this.interactionEvents.forEach((eventName) => {
-            const eventListenerParams = [eventName, this.hydrate, eventListenerOptions];
-            this.$el.addEventListener.apply(null, eventListenerParams);
-            const cleanup = () => this.$el.removeEventListener.apply(null, eventListenerParams);
+            this.$el.addEventListener(eventName, this.hydrate, eventListenerOptions);
+            const cleanup = () => {
+              this.$el.removeEventListener(eventName, this.hydrate, eventListenerOptions);
+            };
             this.cleanupHandlers.push(cleanup);
           });
         }
