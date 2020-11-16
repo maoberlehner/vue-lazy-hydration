@@ -3,6 +3,7 @@
   "version": "2.0.0-beta.1",
   "description": "Lazy hydration of server-side rendered Vue.js components",
   "keywords": [
+    "gridsome",
     "hydration",
     "nuxt",
     "ssr",
