@@ -28,6 +28,7 @@ export function makeHydrationBlocker(component, options) {
           const observerOptions = this.whenVisible !== true ? this.whenVisible : undefined;
           const observer = makeHydrationObserver(observerOptions);
 
+          // If Intersection Observer API is not supported, hydrate immediately.
           if (!observer) {
             this.hydrate();
             return;
