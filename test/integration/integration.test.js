@@ -22,6 +22,18 @@ describe(`integration`, () => {
     });
   });
 
+  describe(`hydrateWhenIdle()`, () => {
+    test(`It should hydrate the component when the browser is idle.`, async () => {
+      await open(`/integration.html`, {});
+
+      let moreText = await page.$(`.DummyIdle.wrapper .more`);
+      expect(moreText).toBe(null);
+
+      moreText = await find(`.DummyIdle.wrapper .more`);
+      expect(moreText).not.toBe(null);
+    });
+  });
+
   describe(`<LazyHydrate when-visible>`, () => {
     test(`It should hydrate the component when it becomes visible.`, async () => {
       await open(`/integration.html`);
@@ -34,6 +46,22 @@ describe(`integration`, () => {
       });
 
       moreText = await find(`.DummyVisible .more`);
+      expect(moreText).not.toBe(null);
+    });
+  });
+
+  describe(`hydrateWhenVisible()`, () => {
+    test(`It should hydrate the component when it becomes visible.`, async () => {
+      await open(`/integration.html`);
+
+      let moreText = await page.$(`.DummyVisible.wrapper .more`);
+      expect(moreText).toBe(null);
+
+      await page.evaluate(() => {
+        document.querySelector(`.DummyVisible.wrapper`).scrollIntoView();
+      });
+
+      moreText = await find(`.DummyVisible.wrapper .more`);
       expect(moreText).not.toBe(null);
     });
   });
@@ -55,6 +83,23 @@ describe(`integration`, () => {
     });
   });
 
+  describe(`hydrateOnInteraction()`, () => {
+    test(`It should hydrate the component when an interaction happens.`, async () => {
+      await open(`/integration.html`);
+
+      let moreText = await page.$(`.DummyInteraction.wrapper .more`);
+      expect(moreText).toBe(null);
+
+      let button = await find(`.DummyInteraction.wrapper button`);
+      await button.click();
+      button = await find(`.DummyInteraction.wrapper button`);
+      await button.click();
+
+      moreText = await find(`.DummyInteraction.wrapper .more`);
+      expect(moreText).not.toBe(null);
+    });
+  });
+
   describe(`<LazyHydrate never>`, () => {
     test(`It should not hydrate the component.`, async () => {
       await open(`/integration.html`);
@@ -63,6 +108,18 @@ describe(`integration`, () => {
       expect(component).not.toBe(null);
 
       const moreText = await page.$(`.DummySsr .more`);
+      expect(moreText).toBe(null);
+    });
+  });
+
+  describe(`hydrateNever()`, () => {
+    test(`It should not hydrate the component.`, async () => {
+      await open(`/integration.html`);
+
+      const component = await find(`.DummySsr.wrapper`);
+      expect(component).not.toBe(null);
+
+      const moreText = await page.$(`.DummySsr.wrapper .more`);
       expect(moreText).toBe(null);
     });
   });

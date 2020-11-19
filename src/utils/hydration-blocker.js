@@ -8,7 +8,7 @@ export function makeHydrationBlocker(component, options) {
       beforeCreate() {
         this.cleanupHandlers = [];
         const { hydrate, hydrationPromise } = makeHydrationPromise();
-        this.Nonce = makeNonce({ component, hydrate, hydrationPromise });
+        this.Nonce = makeNonce({ component, hydrationPromise });
         this.hydrate = hydrate;
         this.hydrationPromise = hydrationPromise;
       },
@@ -28,6 +28,7 @@ export function makeHydrationBlocker(component, options) {
           const observerOptions = this.whenVisible !== true ? this.whenVisible : undefined;
           const observer = makeHydrationObserver(observerOptions);
 
+          // If Intersection Observer API is not supported, hydrate immediately.
           if (!observer) {
             this.hydrate();
             return;
@@ -81,7 +82,10 @@ export function makeHydrationBlocker(component, options) {
         },
       },
       render(h) {
-        return h(this.Nonce, { props: this.$attrs }, this.$slots.default);
+        return h(this.Nonce, {
+          attrs: this.$attrs,
+          scopedSlots: this.$scopedSlots,
+        }, this.$slots.default);
       },
     }],
   }, options);
