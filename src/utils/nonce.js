@@ -1,9 +1,9 @@
 const isServer = typeof window === `undefined`;
 
-export function makeNonce({ component, hydrate, hydrationPromise }) {
-  return () => new Promise((resolve) => {
-    if (isServer) hydrate();
+export function makeNonce({ component, hydrationPromise }) {
+  if (isServer) return component;
 
+  return () => new Promise((resolve) => {
     hydrationPromise.then(() => resolve(component));
   });
 }

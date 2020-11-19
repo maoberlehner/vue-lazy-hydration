@@ -8,7 +8,7 @@ export function makeHydrationBlocker(component, options) {
       beforeCreate() {
         this.cleanupHandlers = [];
         const { hydrate, hydrationPromise } = makeHydrationPromise();
-        this.Nonce = makeNonce({ component, hydrate, hydrationPromise });
+        this.Nonce = makeNonce({ component, hydrationPromise });
         this.hydrate = hydrate;
         this.hydrationPromise = hydrationPromise;
       },
