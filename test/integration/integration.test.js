@@ -9,10 +9,10 @@ export const find = async (selector) => {
   return page.$(selector);
 };
 
-describe(`integration`, () => {
+describe.each([`async`, `sync`])(`%s`, (variant) => {
   describe(`<LazyHydrate when-idle>`, () => {
     test(`It should hydrate the component when the browser is idle.`, async () => {
-      await open(`/integration.html`, {});
+      await open(`/integration-${variant}`, {});
 
       let moreText = await page.$(`.DummyIdle .more`);
       expect(moreText).toBe(null);
@@ -24,7 +24,7 @@ describe(`integration`, () => {
 
   describe(`hydrateWhenIdle()`, () => {
     test(`It should hydrate the component when the browser is idle.`, async () => {
-      await open(`/integration.html`, {});
+      await open(`/integration-${variant}`, {});
 
       let moreText = await page.$(`.DummyIdle.wrapper .more`);
       expect(moreText).toBe(null);
@@ -36,7 +36,7 @@ describe(`integration`, () => {
 
   describe(`<LazyHydrate when-visible>`, () => {
     test(`It should hydrate the component when it becomes visible.`, async () => {
-      await open(`/integration.html`);
+      await open(`/integration-${variant}`);
 
       let moreText = await page.$(`.DummyVisible .more`);
       expect(moreText).toBe(null);
@@ -52,7 +52,7 @@ describe(`integration`, () => {
 
   describe(`hydrateWhenVisible()`, () => {
     test(`It should hydrate the component when it becomes visible.`, async () => {
-      await open(`/integration.html`);
+      await open(`/integration-${variant}`);
 
       let moreText = await page.$(`.DummyVisible.wrapper .more`);
       expect(moreText).toBe(null);
@@ -68,7 +68,7 @@ describe(`integration`, () => {
 
   describe(`<LazyHydrate on-interaction>`, () => {
     test(`It should hydrate the component when an interaction happens.`, async () => {
-      await open(`/integration.html`);
+      await open(`/integration-${variant}`);
 
       let moreText = await page.$(`.DummyInteraction .more`);
       expect(moreText).toBe(null);
@@ -85,7 +85,7 @@ describe(`integration`, () => {
 
   describe(`hydrateOnInteraction()`, () => {
     test(`It should hydrate the component when an interaction happens.`, async () => {
-      await open(`/integration.html`);
+      await open(`/integration-${variant}`);
 
       let moreText = await page.$(`.DummyInteraction.wrapper .more`);
       expect(moreText).toBe(null);
@@ -102,7 +102,7 @@ describe(`integration`, () => {
 
   describe(`<LazyHydrate never>`, () => {
     test(`It should not hydrate the component.`, async () => {
-      await open(`/integration.html`);
+      await open(`/integration-${variant}`);
 
       const component = await find(`.DummySsr`);
       expect(component).not.toBe(null);
@@ -114,7 +114,7 @@ describe(`integration`, () => {
 
   describe(`hydrateNever()`, () => {
     test(`It should not hydrate the component.`, async () => {
-      await open(`/integration.html`);
+      await open(`/integration-${variant}`);
 
       const component = await find(`.DummySsr.wrapper`);
       expect(component).not.toBe(null);
