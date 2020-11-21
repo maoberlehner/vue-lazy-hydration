@@ -81,6 +81,25 @@ describe.each([`async`, `sync`])(`%s`, (variant) => {
       moreText = await find(`.DummyInteraction .more`);
       expect(moreText).not.toBe(null);
     });
+
+    test(`It should render show slot content.`, async () => {
+      await open(`/integration-${variant}`);
+
+      let defaultSlot = await find(`.DummyInteraction .default-slot`);
+      expect(defaultSlot).not.toBe(null);
+      let namedSlot = await find(`.DummyInteraction .named-slot`);
+      expect(namedSlot).not.toBe(null);
+
+      let button = await find(`.DummyInteraction button`);
+      await button.click();
+      button = await find(`.DummyInteraction button`);
+      await button.click();
+
+      defaultSlot = await find(`.DummyInteraction .default-slot`);
+      expect(defaultSlot).not.toBe(null);
+      namedSlot = await find(`.DummyInteraction .named-slot`);
+      expect(namedSlot).not.toBe(null);
+    });
   });
 
   describe(`hydrateOnInteraction()`, () => {
@@ -97,6 +116,25 @@ describe.each([`async`, `sync`])(`%s`, (variant) => {
 
       moreText = await find(`.DummyInteraction.wrapper .more`);
       expect(moreText).not.toBe(null);
+    });
+
+    test(`It should render show slot content.`, async () => {
+      await open(`/integration-${variant}`);
+
+      let defaultSlot = await find(`.DummyInteraction.wrapper .default-slot`);
+      expect(defaultSlot).not.toBe(null);
+      let namedSlot = await find(`.DummyInteraction.wrapper .named-slot`);
+      expect(namedSlot).not.toBe(null);
+
+      let button = await find(`.DummyInteraction.wrapper button`);
+      await button.click();
+      button = await find(`.DummyInteraction.wrapper button`);
+      await button.click();
+
+      defaultSlot = await find(`.DummyInteraction.wrapper .default-slot`);
+      expect(defaultSlot).not.toBe(null);
+      namedSlot = await find(`.DummyInteraction.wrapper .named-slot`);
+      expect(namedSlot).not.toBe(null);
     });
   });
 

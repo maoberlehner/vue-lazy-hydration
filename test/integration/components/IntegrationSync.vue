@@ -5,9 +5,21 @@
     </LazyHydrate>
     <DummyIdleWrapper class="wrapper"/>
     <LazyHydrate on-interaction>
-      <DummyInteraction/>
+      <DummyInteraction>
+        <div class="default-slot"/>
+        <div
+          slot="named"
+          class="named-slot"
+        />
+      </DummyInteraction>
     </LazyHydrate>
-    <DummyInteractionWrapper class="wrapper"/>
+    <DummyInteractionWrapper class="wrapper">
+      <div class="default-slot"/>
+      <div
+        slot="named"
+        class="named-slot"
+      />
+    </DummyInteractionWrapper>
     <LazyHydrate never>
       <DummySsr/>
     </LazyHydrate>

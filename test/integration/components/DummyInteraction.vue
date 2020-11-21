@@ -15,6 +15,8 @@
     >
       Just more.
     </div>
+    <slot/>
+    <slot name="named"/>
   </div>
 </template>
 
