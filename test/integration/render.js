@@ -16,8 +16,14 @@ const integrationRenderer = vueServerRenderer.createRenderer({
   template: fs.readFileSync(`${__dirname}/template.html`, `utf-8`),
 });
 
-integrationRenderer.renderToString(entryIntegration.App, (error, html) => {
+integrationRenderer.renderToString(entryIntegration.AppAsync, (error, html) => {
   if (error) throw error;
 
-  saveFile(`integration`, html);
+  saveFile(`integration-async`, html);
+});
+
+integrationRenderer.renderToString(entryIntegration.AppSync, (error, html) => {
+  if (error) throw error;
+
+  saveFile(`integration-sync`, html);
 });

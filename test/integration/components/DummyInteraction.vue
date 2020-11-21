@@ -8,6 +8,12 @@
     >
       Click me
     </button>
+    <button
+      class="button-some-event"
+      @click="$emit(`some-event`)"
+    >
+      Fire some event
+    </button>
     <br>
     <div
       v-if="more"
@@ -15,6 +21,8 @@
     >
       Just more.
     </div>
+    <slot/>
+    <slot name="named"/>
   </div>
 </template>
 

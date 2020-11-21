@@ -1,13 +1,38 @@
 <template>
-  <div id="app">
+  <div id="app-sync">
     <LazyHydrate when-idle>
       <DummyIdle/>
     </LazyHydrate>
     <DummyIdleWrapper class="wrapper"/>
     <LazyHydrate on-interaction>
-      <DummyInteraction/>
+      <DummyInteraction @some-event="event1Triggered = true">
+        <div class="default-slot">
+          <div
+            v-if="event1Triggered"
+            class="show-when-event"
+          />
+        </div>
+        <div
+          slot="named"
+          class="named-slot"
+        />
+      </DummyInteraction>
     </LazyHydrate>
-    <DummyInteractionWrapper class="wrapper"/>
+    <DummyInteractionWrapper
+      class="wrapper"
+      @some-event="event2Triggered = true"
+    >
+      <div class="default-slot">
+        <div
+          v-if="event2Triggered"
+          class="show-when-event"
+        />
+      </div>
+      <div
+        slot="named"
+        class="named-slot"
+      />
+    </DummyInteractionWrapper>
     <LazyHydrate never>
       <DummySsr/>
     </LazyHydrate>
@@ -87,6 +112,78 @@
     <LazyHydrate when-visible>
       <DummyVisible/>
     </LazyHydrate>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
     <DummyVisibleWrapper class="wrapper"/>
   </div>
 </template>
@@ -116,6 +213,12 @@ export default {
     DummyVisible,
     DummyVisibleWrapper: hydrateWhenVisible(DummyVisible),
     LazyHydrate,
+  },
+  data() {
+    return {
+      event1Triggered: false,
+      event2Triggered: false,
+    };
   },
 };
 </script>

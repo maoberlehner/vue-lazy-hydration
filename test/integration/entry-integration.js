@@ -1,7 +1,12 @@
 import Vue from 'vue';
 
-import Integration from './components/Integration.vue';
+import IntegrationAsync from './components/IntegrationAsync.vue';
+import IntegrationSync from './components/IntegrationSync.vue';
 
-export const App = new Vue({
-  render: h => h(Integration),
-}).$mount(`#app`);
+export const AppAsync = new Vue({
+  render: h => h(IntegrationAsync),
+}).$mount(`#app-async`);
+
+export const AppSync = new Vue({
+  render: h => h(IntegrationSync),
+}).$mount(`#app-sync`);
