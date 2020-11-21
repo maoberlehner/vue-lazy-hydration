@@ -73,9 +73,9 @@ describe.each([`async`, `sync`])(`%s`, (variant) => {
       let moreText = await page.$(`.DummyInteraction .more`);
       expect(moreText).toBe(null);
 
-      let button = await find(`.DummyInteraction button`);
+      let button = await find(`.DummyInteraction .button`);
       await button.click();
-      button = await find(`.DummyInteraction button`);
+      button = await find(`.DummyInteraction .button`);
       await button.click();
 
       moreText = await find(`.DummyInteraction .more`);
@@ -90,15 +90,27 @@ describe.each([`async`, `sync`])(`%s`, (variant) => {
       let namedSlot = await find(`.DummyInteraction .named-slot`);
       expect(namedSlot).not.toBe(null);
 
-      let button = await find(`.DummyInteraction button`);
+      let button = await find(`.DummyInteraction .button`);
       await button.click();
-      button = await find(`.DummyInteraction button`);
+      button = await find(`.DummyInteraction .button`);
       await button.click();
 
       defaultSlot = await find(`.DummyInteraction .default-slot`);
       expect(defaultSlot).not.toBe(null);
       namedSlot = await find(`.DummyInteraction .named-slot`);
       expect(namedSlot).not.toBe(null);
+    });
+
+    test(`It should be possible to listen to events triggerd by lazy component.`, async () => {
+      await open(`/integration-${variant}`);
+
+      let button = await find(`.DummyInteraction .button`);
+      await button.click();
+      button = await find(`.DummyInteraction .button-some-event`);
+      await button.click();
+
+      const div = await find(`.DummyInteraction .show-when-event`);
+      expect(div).not.toBe(null);
     });
   });
 
@@ -109,9 +121,9 @@ describe.each([`async`, `sync`])(`%s`, (variant) => {
       let moreText = await page.$(`.DummyInteraction.wrapper .more`);
       expect(moreText).toBe(null);
 
-      let button = await find(`.DummyInteraction.wrapper button`);
+      let button = await find(`.DummyInteraction.wrapper .button`);
       await button.click();
-      button = await find(`.DummyInteraction.wrapper button`);
+      button = await find(`.DummyInteraction.wrapper .button`);
       await button.click();
 
       moreText = await find(`.DummyInteraction.wrapper .more`);
@@ -126,15 +138,27 @@ describe.each([`async`, `sync`])(`%s`, (variant) => {
       let namedSlot = await find(`.DummyInteraction.wrapper .named-slot`);
       expect(namedSlot).not.toBe(null);
 
-      let button = await find(`.DummyInteraction.wrapper button`);
+      let button = await find(`.DummyInteraction.wrapper .button`);
       await button.click();
-      button = await find(`.DummyInteraction.wrapper button`);
+      button = await find(`.DummyInteraction.wrapper .button`);
       await button.click();
 
       defaultSlot = await find(`.DummyInteraction.wrapper .default-slot`);
       expect(defaultSlot).not.toBe(null);
       namedSlot = await find(`.DummyInteraction.wrapper .named-slot`);
       expect(namedSlot).not.toBe(null);
+    });
+
+    test(`It should be possible to listen to events triggerd by lazy component.`, async () => {
+      await open(`/integration-${variant}`);
+
+      let button = await find(`.DummyInteraction.wrapper .button`);
+      await button.click();
+      button = await find(`.DummyInteraction.wrapper .button-some-event`);
+      await button.click();
+
+      const div = await find(`.DummyInteraction.wrapper .show-when-event`);
+      expect(div).not.toBe(null);
     });
   });
 

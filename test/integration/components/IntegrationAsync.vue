@@ -5,16 +5,29 @@
     </LazyHydrate>
     <DummyIdleWrapper class="wrapper"/>
     <LazyHydrate on-interaction>
-      <DummyInteraction>
-        <div class="default-slot"/>
+      <DummyInteraction @some-event="event1Triggered = true">
+        <div class="default-slot">
+          <div
+            v-if="event1Triggered"
+            class="show-when-event"
+          />
+        </div>
         <div
           slot="named"
           class="named-slot"
         />
       </DummyInteraction>
     </LazyHydrate>
-    <DummyInteractionWrapper class="wrapper">
-      <div class="default-slot"/>
+    <DummyInteractionWrapper
+      class="wrapper"
+      @some-event="event2Triggered = true"
+    >
+      <div class="default-slot">
+        <div
+          v-if="event2Triggered"
+          class="show-when-event"
+        />
+      </div>
       <div
         slot="named"
         class="named-slot"
@@ -200,6 +213,12 @@ export default {
     DummyVisible,
     DummyVisibleWrapper: hydrateWhenVisible(DummyVisible),
     LazyHydrate,
+  },
+  data() {
+    return {
+      event1Triggered: false,
+      event2Triggered: false,
+    };
   },
 };
 </script>
