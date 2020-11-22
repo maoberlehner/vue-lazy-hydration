@@ -59,8 +59,13 @@
     "vue-server-renderer": "^2.6.12",
     "vue-template-compiler": "^2.6.12"
   },
+  "types": "index",
   "main": "dist/LazyHydrate.js",
   "module": "dist/LazyHydrate.esm.js",
+  "files": [
+    "index.d.ts",
+    "dist/"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/maoberlehner/vue-lazy-hydration"
