@@ -1,4 +1,4 @@
-const vueServerRenderer = require(`vue-server-renderer`);
+const vueServerRenderer = require(`@vue/server-renderer`);
 const fs = require(`fs`);
 
 const entryReference = require(`./dist/entry-reference.common.js`);

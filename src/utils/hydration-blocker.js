@@ -1,9 +1,13 @@
+import { h, ref } from 'vue';
 import { makeHydrationObserver } from './hydration-observer';
 import { makeHydrationPromise } from './hydration-promise';
 import { makeNonce } from './nonce';
 
 export function makeHydrationBlocker(component, options) {
   return Object.assign({
+    get $el() {
+      return ref();
+    },
     mixins: [{
       beforeCreate() {
         this.cleanupHandlers = [];
@@ -81,7 +85,7 @@ export function makeHydrationBlocker(component, options) {
           this.cleanupHandlers.forEach(handler => handler());
         },
       },
-      render(h) {
+      render() {
         return h(this.Nonce, {
           attrs: this.$attrs,
           on: this.$listeners,
