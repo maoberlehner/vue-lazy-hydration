@@ -37,7 +37,7 @@ export function hydrateOnInteraction(componentOrFactory, { event = `focus` } = {
 
 const Placeholder = {
   render() {
-    return this.$slots.default;
+    return this.$slots.default();
   },
 };
 

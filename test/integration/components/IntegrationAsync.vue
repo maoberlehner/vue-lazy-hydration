@@ -12,8 +12,8 @@
             class="show-when-event"
           />
         </div>
-        <div
-          slot="named"
+        <template
+          #named
           class="named-slot"
         />
       </DummyInteraction>
@@ -28,8 +28,8 @@
           class="show-when-event"
         />
       </div>
-      <div
-        slot="named"
+      <template
+        #named
         class="named-slot"
       />
     </DummyInteractionWrapper>

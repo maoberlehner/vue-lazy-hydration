@@ -1,12 +1,17 @@
-import Vue from 'vue';
+import { createSSRApp, createApp } from 'vue';
 
 import IntegrationAsync from './components/IntegrationAsync.vue';
 import IntegrationSync from './components/IntegrationSync.vue';
 
-export const AppAsync = new Vue({
-  render: h => h(IntegrationAsync),
-}).$mount(`#app-async`);
+const isBrowser = typeof document !== `undefined`;
+const newApp = isBrowser ? createSSRApp : createApp;
 
-export const AppSync = new Vue({
-  render: h => h(IntegrationSync),
-}).$mount(`#app-sync`);
+
+export const AppAsync = newApp(IntegrationAsync);
+
+export const AppSync = newApp(IntegrationSync);
+
+if (isBrowser) {
+  AppAsync.mount(`#app-async`);
+  AppSync.mount(`#app-sync`);
+}

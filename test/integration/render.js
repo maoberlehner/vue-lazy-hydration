@@ -1,10 +1,12 @@
 const fs = require(`fs`);
-const vueServerRenderer = require(`vue-server-renderer`);
+const { renderToString } = require(`@vue/server-renderer`);
 
 const entryIntegration = require(`./dist/entry-integration.common.js`);
 
 function saveFile(name, contents) {
-  fs.writeFile(`${__dirname}/dist/${name}.html`, contents, (error) => {
+  const entry = fs.readFileSync(`${__dirname}/template.html`, `utf-8`);
+
+  fs.writeFile(`${__dirname}/dist/${name}.html`, entry.replace(`<!--vue-ssr-outlet-->`, contents), (error) => {
     if (error) throw error;
 
     // eslint-disable-next-line no-console
@@ -12,18 +14,10 @@ function saveFile(name, contents) {
   });
 }
 
-const integrationRenderer = vueServerRenderer.createRenderer({
-  template: fs.readFileSync(`${__dirname}/template.html`, `utf-8`),
+renderToString(entryIntegration.AppAsync).then((result) => {
+  saveFile(`integration-async`, result);
 });
 
-integrationRenderer.renderToString(entryIntegration.AppAsync, (error, html) => {
-  if (error) throw error;
-
-  saveFile(`integration-async`, html);
-});
-
-integrationRenderer.renderToString(entryIntegration.AppSync, (error, html) => {
-  if (error) throw error;
-
-  saveFile(`integration-sync`, html);
+renderToString(entryIntegration.AppSync).then((result) => {
+  saveFile(`integration-sync`, result);
 });

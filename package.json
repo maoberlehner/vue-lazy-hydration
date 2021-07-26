@@ -54,10 +54,7 @@
     "rollup": "^2.33.3",
     "rollup-plugin-babel": "^4.4.0",
     "serve": "^11.3.2",
-    "uglify-es": "^3.3.9",
-    "vue": "^2.6.12",
-    "vue-server-renderer": "^2.6.12",
-    "vue-template-compiler": "^2.6.12"
+    "uglify-es": "^3.3.9"
   },
   "main": "dist/LazyHydrate.js",
   "module": "dist/LazyHydrate.esm.js",
@@ -72,5 +69,10 @@
     "> 0.5%",
     "not ie <= 10",
     "not op_mini all"
-  ]
+  ],
+  "dependencies": {
+    "vue": "^3.1.5",
+    "@vue/server-renderer": "^3.1.5",
+    "@vue/compiler-sfc": "^3.1.5"
+  }
 }
