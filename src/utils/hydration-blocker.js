@@ -5,22 +5,31 @@ import { makeNonce } from './nonce';
 
 export function makeHydrationBlocker(component, options) {
   return Object.assign({
-    get $el() {
-      return ref();
+    render() {
+      console.log('renderFn');
+      return h(this.Nonce, {
+        // attrs: this.$attrs,
+        // on: this.$listeners,
+        // scopedSlots: this.$scopedSlots,
+      }, this.$slots.default);
     },
     mixins: [{
       beforeCreate() {
+        console.log('beforeCreate');
         this.cleanupHandlers = [];
         const { hydrate, hydrationPromise } = makeHydrationPromise();
         this.Nonce = makeNonce({ component, hydrationPromise });
         this.hydrate = hydrate;
         this.hydrationPromise = hydrationPromise;
       },
-      beforeDestroy() {
+      beforeUnmount() {
         this.cleanup();
       },
       mounted() {
-        if (this.$el.nodeType === Node.COMMENT_NODE) {
+        const targetNode = this.$el.nextSibling;
+        console.log('mounted', this.$el.nextSibling, this);
+        if (this.$el.nodeType === Node.COMMENT_NODE && !targetNode) {
+          console.log('no-ssr link found', this.$el);
           // No SSR rendered content, hydrate immediately.
           this.hydrate();
           return;
@@ -28,7 +37,7 @@ export function makeHydrationBlocker(component, options) {
 
         if (this.never) return;
 
-        if (this.whenVisible) {
+        if (targetNode && this.whenVisible) {
           const observerOptions = this.whenVisible !== true ? this.whenVisible : undefined;
           const observer = makeHydrationObserver(observerOptions);
 
@@ -38,15 +47,15 @@ export function makeHydrationBlocker(component, options) {
             return;
           }
 
-          this.$el.hydrate = this.hydrate;
-          const cleanup = () => observer.unobserve(this.$el);
+          targetNode.hydrate = this.hydrate;
+          const cleanup = () => observer.unobserve(targetNode);
           this.cleanupHandlers.push(cleanup);
           this.hydrationPromise.then(cleanup);
-          observer.observe(this.$el);
+          observer.observe(targetNode);
           return;
         }
 
-        if (this.whenIdle) {
+        if (targetNode && this.whenIdle) {
           // If `requestIdleCallback()` or `requestAnimationFrame()`
           // is not supported, hydrate immediately.
           if (!(`requestIdleCallback` in window) || !(`requestAnimationFrame` in window)) {
@@ -64,17 +73,22 @@ export function makeHydrationBlocker(component, options) {
           this.hydrationPromise.then(cleanup);
         }
 
-        if (this.interactionEvents && this.interactionEvents.length) {
+        console.log('interactionEvents', this.interactionEvents);
+
+
+        const interactionEvents = ['click'] //this.interactionEvents;
+        if (interactionEvents && interactionEvents.length) {
+          console.log('interactionEvents', interactionEvents);
           const eventListenerOptions = {
             capture: true,
             once: true,
             passive: true,
           };
 
-          this.interactionEvents.forEach((eventName) => {
-            this.$el.addEventListener(eventName, this.hydrate, eventListenerOptions);
+          interactionEvents.forEach((eventName) => {
+            targetNode.addEventListener(eventName, this.hydrate, eventListenerOptions);
             const cleanup = () => {
-              this.$el.removeEventListener(eventName, this.hydrate, eventListenerOptions);
+              targetNode.removeEventListener(eventName, this.hydrate, eventListenerOptions);
             };
             this.cleanupHandlers.push(cleanup);
           });
@@ -84,14 +98,7 @@ export function makeHydrationBlocker(component, options) {
         cleanup() {
           this.cleanupHandlers.forEach(handler => handler());
         },
-      },
-      render() {
-        return h(this.Nonce, {
-          attrs: this.$attrs,
-          on: this.$listeners,
-          scopedSlots: this.$scopedSlots,
-        }, this.$slots.default);
-      },
+      }
     }],
   }, options);
 }
