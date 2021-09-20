@@ -78,7 +78,7 @@ export default makeHydrationBlocker(Placeholder, {
     triggerHydration: {
       immediate: true,
       handler(isTriggered) {
-        if (isTriggered) this.hydrate();
+        if (isTriggered && this.hydrate) this.hydrate();
       },
     },
   },
