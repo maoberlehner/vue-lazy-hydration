@@ -7166,10 +7166,10 @@ markdown-escapes@^1.0.0:
   resolved "https://registry.yarnpkg.com/markdown-escapes/-/markdown-escapes-1.0.4.tgz#c95415ef451499d7602b91095f3c8e8975f78535"
   integrity sha512-8z4efJYk43E0upd0NbVXwgSTQs6cT3T06etieCMEg7dRbzCbxUCK/GHlX8mhHRDcp+OLlHkPKsvqQTCvsRl2cg==
 
-marked@^1.2.4:
-  version "1.2.4"
-  resolved "https://registry.yarnpkg.com/marked/-/marked-1.2.4.tgz#94e99230b03496c9383b1322ac51bc17dd388a1d"
-  integrity sha512-6x5TFGCTKSQBLTZtOburGxCxFEBJEGYVLwCMTBCxzvyuisGcC20UNzDSJhCr/cJ/Kmh6ulfJm10g6WWEAJ3kvg==
+marked@^4.0.10:
+  version "4.0.10"
+  resolved "https://registry.yarnpkg.com/marked/-/marked-4.0.10.tgz#423e295385cc0c3a70fa495e0df68b007b879423"
+  integrity sha512-+QvuFj0nGgO970fySghXGmuw+Fd0gD2x3+MqCWLIPf5oxdv1Ka6b2q+z9RP01P/IaKPMEramy+7cNy/Lw8c3hw==
 
 marky@^1.2.0:
   version "1.2.1"
